@@ -18,6 +18,7 @@ import HomePage from 'containers/HomePage/Loadable';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
 import ButtonAppBar from './ButtonAppBar';
 import LoginForm from '../LoginForm';
+import SignupForm from '../SignupForm';
 
 export default function App() {
   return (
@@ -26,6 +27,7 @@ export default function App() {
       <Switch>
         <Route exact path="/" component={HomePage} />
         <Route exact path="/login" component={LoginForm} />
+        <Route exact path="/signup" component={SignupForm} />
         <Route component={NotFoundPage} />
       </Switch>
     </div>
