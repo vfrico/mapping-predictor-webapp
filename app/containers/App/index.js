@@ -19,17 +19,30 @@ import NotFoundPage from 'containers/NotFoundPage/Loadable';
 import ButtonAppBar from './ButtonAppBar';
 import LoginForm from '../LoginForm';
 import SignupForm from '../SignupForm';
+import TemplateView from '../TemplateView';
+import { Paper } from '@material-ui/core';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import grey from '@material-ui/core/colors/grey';
 
 export default function App() {
+  const theme = createMuiTheme({
+    palette: {
+      primary: { main: grey[700] }, // Purple and green play nicely together.
+      secondary: { main: '#11cb5f' }, // This is just green.A700 as hex.
+    },
+  });
+
   return (
     <div>
-      <ButtonAppBar/>
-      <Switch>
-        <Route exact path="/" component={HomePage} />
-        <Route exact path="/login" component={LoginForm} />
-        <Route exact path="/signup" component={SignupForm} />
-        <Route component={NotFoundPage} />
-      </Switch>
+      <MuiThemeProvider theme={theme}>
+        <ButtonAppBar/>
+        <Switch>
+          <Route exact path="/" component={TemplateView} />
+          <Route exact path="/login" component={LoginForm} />
+          <Route exact path="/signup" component={SignupForm} />
+          <Route component={NotFoundPage} />
+        </Switch>
+      </MuiThemeProvider>
     </div>
   );
 }

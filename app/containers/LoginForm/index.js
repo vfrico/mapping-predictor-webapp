@@ -22,14 +22,20 @@ import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 
+import UserForm from '../../components/UserForm';
+
 const styles = theme => ({
   container: {
-    display: 'flex',
-    flexWrap: 'wrap',
+    // display: 'flex',
+    // flexWrap: 'wrap',
     paddingTop: 'em',
   },
   login: {
-    width: "100%"
+    width: "100%",
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   textField: {
     marginLeft: theme.spacing.unit,
@@ -40,7 +46,8 @@ const styles = theme => ({
     width: 200,
   },
   root: {
-    flexGrow: 1,
+    // flexGrow: 1,
+    marginTop: '2em'
   },
   paper: {
     padding: theme.spacing.unit * 2,
@@ -55,8 +62,10 @@ export class LoginForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-       name: "",
-       password: "",
+        userName: "",
+        password: "",
+        email: "",
+        signUp: false,
     };
   }
 
@@ -67,43 +76,86 @@ export class LoginForm extends React.Component {
     });
   };
 
-  clickActuator = () => {
+  sendLoginForm = () => {
     console.log("Click!!: "+this.state.name)
+
+    // TODO: if is a signup, first create the user and then login
+  }
+
+  changeToSignUp = () => {
+    console.log("sign up");
+    this.setState({signUp: true})
+    console.log("state.signUp:"+this.state.signUp);
+  }
+
+  changeToLogIn = () => {
+    console.log("log in");
+    this.setState({signUp: false})
+    console.log("state.signUp:"+this.state.signUp);
   }
 
   render() {
     const { classes } = this.props;
+
+    let emailForm;
+    let buttonText;
+
+    if (this.state.signUp) {
+      emailForm = <div>
+        <TextField
+          id="email"
+          label="Email"
+          value={this.state.email}
+          className={classes.textField}
+          onChange={this.handleChange('email')}
+          margin="normal"
+        />
+
+        <p>Do you already have an account? <span onClick={this.changeToLogIn}>Log in</span></p>
+
+        </div>;
+
+      buttonText = "Sign up";
+    } else {
+      emailForm = <div>
+        <p>Need a new account? <span onClick={this.changeToSignUp}>Sign up</span></p>
+        </div>;
+      buttonText = "Log in";
+    }
+
     return (
       <div className={classes.root}>
-
-      <Grid container spacing={24}>
+      <Grid container spacing={40}>
         <Grid item xs={3}/>
         <Grid item xs={6}>
           <Paper className={classes.paper}>
             <form className={classes.container} noValidate autoComplete="off">
               <div className={classes.login}>
-                <h1><FormattedMessage {...messages.header} /></h1>
+                <h1>{buttonText}</h1>
               </div>
-              
+              <p>{JSON.stringify(this.state)}</p>
               <div className={classes.login}>
                 <TextField
-                  id="name"
-                  label="Name"
-                  value={this.state.name}
+                  id="userName"
+                  label="Username"
+                  value={this.state.userName}
                   className={classes.textField}
-                  onChange={this.handleChange('name')}
+                  onChange={this.handleChange('userName')}
                   margin="normal"
                 />
                 <TextField
                   id="password"
                   label="Password"
+                  type="password"
                   value={this.state.password}
                   className={classes.textField}
                   onChange={this.handleChange('password')}
                   margin="normal"
                 />
-                <Button onClick={this.clickActuator}>
-                  Login
+                {emailForm}
+                
+                <Button onClick={this.sendLoginForm}>
+                  {buttonText}
                 </Button>
               </div>
             </form>
