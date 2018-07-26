@@ -23,6 +23,7 @@ import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 
 import UserForm from '../../components/UserForm';
+import { sendLogin } from './actions';
 
 const styles = theme => ({
   container: {
@@ -80,6 +81,8 @@ export class LoginForm extends React.Component {
     console.log("Click!!: "+this.state.name)
 
     // TODO: if is a signup, first create the user and then login
+
+    this.props.dispatch(sendLogin("username", "password"));
   }
 
   changeToSignUp = () => {

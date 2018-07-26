@@ -9,6 +9,8 @@ import MenuIcon from '@material-ui/icons/Menu';
 import { BrowserRouter, Route, Link } from 'react-router-dom';
 import { MuiThemeProvider, withStyles, createMuiTheme } from '@material-ui/core/styles';
 import green from '@material-ui/core/colors/green';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
 
 const whiteColor = {
   color: 'white'
@@ -46,7 +48,7 @@ function ButtonAppBar(props) {
             <MenuIcon />
           </IconButton>
           <Typography variant="title" className={classes.flex}>
-            News
+            News {JSON.stringify(props)}
           </Typography>
           <Link to="/login">
             <Button className={classes.button}>
@@ -63,4 +65,19 @@ ButtonAppBar.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(ButtonAppBar);
+const mapStateToProps = (state) => {
+  return {
+      userInfo: state.get('loginForm')
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+      onMenuClick: (id) => {
+          dispatch();
+      }
+  };
+};
+
+
+export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(ButtonAppBar));
