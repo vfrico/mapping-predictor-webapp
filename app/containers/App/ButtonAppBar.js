@@ -36,8 +36,13 @@ const styles = {
 
 function ButtonAppBar(props) {
   const { classes } = props;
-  const styles = {
 
+  var loggedIn;
+
+  if (props.userInfo != undefined) {
+    loggedIn = true;
+  } else {
+    loggedIn = false;
   }
 
   return (
@@ -48,7 +53,7 @@ function ButtonAppBar(props) {
             <MenuIcon />
           </IconButton>
           <Typography variant="title" className={classes.flex}>
-            News {JSON.stringify(props)}
+            News {loggedIn}
           </Typography>
           <Link to="/login">
             <Button className={classes.button}>
@@ -63,6 +68,7 @@ function ButtonAppBar(props) {
 
 ButtonAppBar.propTypes = {
   classes: PropTypes.object.isRequired,
+  userInfo: PropTypes.object,
 };
 
 const mapStateToProps = (state) => {
@@ -79,5 +85,7 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-
-export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(ButtonAppBar));
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  withStyles(styles),
+)(ButtonAppBar);

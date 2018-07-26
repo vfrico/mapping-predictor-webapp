@@ -198,4 +198,5 @@ export default compose(
   withReducer,
   withSaga,
   withConnect,
-)(withStyles(styles)(LoginForm));
+  withStyles(styles),
+)(LoginForm);
