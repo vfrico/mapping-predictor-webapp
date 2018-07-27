@@ -18,7 +18,7 @@ import HomePage from 'containers/HomePage/Loadable';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
 import ButtonAppBar from './ButtonAppBar';
 import LoginForm from '../LoginForm';
-import SignupForm from '../SignupForm';
+import UserPage from '../UserPage';
 import TemplateView from '../TemplateView';
 import { Paper } from '@material-ui/core';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
@@ -39,7 +39,7 @@ export default function App() {
         <Switch>
           <Route exact path="/" component={TemplateView} />
           <Route exact path="/login" component={LoginForm} />
-          <Route exact path="/signup" component={SignupForm} />
+          <Route exact path="/user" component={UserPage} />
           <Route component={NotFoundPage} />
         </Switch>
       </MuiThemeProvider>

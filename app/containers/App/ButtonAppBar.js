@@ -6,11 +6,14 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
+import AccountCircle from '@material-ui/icons/AccountCircle';
 import { BrowserRouter, Route, Link } from 'react-router-dom';
 import { MuiThemeProvider, withStyles, createMuiTheme } from '@material-ui/core/styles';
 import green from '@material-ui/core/colors/green';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
+import { get } from 'immutable';
+
 
 const whiteColor = {
   color: 'white'
@@ -37,12 +40,28 @@ const styles = {
 function ButtonAppBar(props) {
   const { classes } = props;
 
-  var loggedIn;
-
+  var userInfo = {};
   if (props.userInfo != undefined) {
-    loggedIn = true;
+    userInfo = props.userInfo.toJS();
+  }
+
+  var loggedIn, rightComponent;
+
+  console.log("Info: "+JSON.stringify(userInfo)+", de tipo: "+typeof(userInfo))
+  if (userInfo.user != undefined) {
+    loggedIn = 'yes';
+    rightComponent = <Link to="/user">
+      <IconButton>
+        <AccountCircle />
+      </IconButton>
+    </Link>;
   } else {
-    loggedIn = false;
+    loggedIn = 'no';
+    rightComponent = <Link to="/login">
+      <Button className={classes.button}>
+        Login
+      </Button>
+    </Link>;
   }
 
   return (
@@ -53,13 +72,10 @@ function ButtonAppBar(props) {
             <MenuIcon />
           </IconButton>
           <Typography variant="title" className={classes.flex}>
-            News {loggedIn}
+            News 
+            {/* {JSON.stringify(userInfo)} {loggedIn} */}
           </Typography>
-          <Link to="/login">
-            <Button className={classes.button}>
-              Login
-            </Button>
-          </Link>
+          {rightComponent}
         </Toolbar>
       </AppBar>
     </div>
