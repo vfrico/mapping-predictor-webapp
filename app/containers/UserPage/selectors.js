@@ -11,6 +11,8 @@ const selectUserPageDomain = state => state.get('userPage', initialState);
  * Other specific selectors
  */
 
+const selectUserInformation = state => state.get('loginForm', initialState);
+
 /**
  * Default selector used by UserPage
  */
@@ -18,5 +20,8 @@ const selectUserPageDomain = state => state.get('userPage', initialState);
 const makeSelectUserPage = () =>
   createSelector(selectUserPageDomain, substate => substate.toJS());
 
+const makeSelectUserInformation = () =>
+  createSelector(selectUserInformation, substate => substate.toJS());
+
 export default makeSelectUserPage;
-export { selectUserPageDomain };
+export { selectUserPageDomain , makeSelectUserInformation};

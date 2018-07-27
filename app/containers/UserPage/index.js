@@ -13,35 +13,21 @@ import { compose } from 'redux';
 
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
-import makeSelectUserPage from './selectors';
+import makeSelectUserPage, { makeSelectUserInformation } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 import messages from './messages';
-
+import { Button, withStyles } from '@material-ui/core';
+import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
+import { logoutAction } from './actions';
 
 const styles = theme => ({
-  container: {
-    // display: 'flex',
-    // flexWrap: 'wrap',
-    paddingTop: 'em',
-  },
-  login: {
-    width: "100%",
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   textField: {
     marginLeft: theme.spacing.unit,
     marginRight: theme.spacing.unit,
-    width: 200,
-  },
-  menu: {
-    width: 200,
   },
   root: {
-    // flexGrow: 1,
     marginTop: '2em'
   },
   paper: {
@@ -49,47 +35,55 @@ const styles = theme => ({
     textAlign: 'center',
     color: theme.palette.text.secondary,
   },
+  container: {
+    width: "100%",
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: '1em 0',
+  }
 });
 
 /* eslint-disable react/prefer-stateless-function */
 export class UserPage extends React.Component {
+
+  getFromProps = name => {
+    // this.props.loginInfo.get('email')
+    console.log(this.props)
+    try {
+      return this.props.loginInfo.user[name]
+    } catch (error) {
+      console.log("Error: "+error)
+      return false
+    }
+  }
+
+  doLogout = ()  => {
+    console.log("Execute logout");
+    this.props.dispatch(logoutAction());
+  }
   render() {
+    const { classes } = this.props;
     return (
-<div className={classes.root}>
+      <div className={classes.root}>
       <Grid container spacing={0}>
         <Grid item xs={3}/>
         <Grid item xs={6}>
           <Paper className={classes.paper}>
-            <form className={classes.container} noValidate autoComplete="off">
-              <div className={classes.login}>
-                <h1>{buttonText}</h1>
+            <h1>User page</h1>
+            <div className={classes.container}>
+              <div className={classes.textField}>
+                User: {this.getFromProps('username')}
               </div>
-              <p>{JSON.stringify(this.state)}</p>
-              <div className={classes.login}>
-                <TextField
-                  id="userName"
-                  label="Username"
-                  value={this.state.userName}
-                  className={classes.textField}
-                  onChange={this.handleChange('userName')}
-                  margin="normal"
-                />
-                <TextField
-                  id="password"
-                  label="Password"
-                  type="password"
-                  value={this.state.password}
-                  className={classes.textField}
-                  onChange={this.handleChange('password')}
-                  margin="normal"
-                />
-                {emailForm}
-                
-                <Button onClick={this.sendLoginForm}>
-                  {buttonText}
-                </Button>
+              <div className={classes.textField}>
+                Email: {this.getFromProps('email')}
               </div>
-            </form>
+            </div>
+            {JSON.stringify(this.props.loginInfo)}
+            <Button onClick={this.doLogout}>
+              Logout
+            </Button>
           </Paper>
         </Grid>
         <Grid item xs={3}/>
@@ -105,6 +99,7 @@ UserPage.propTypes = {
 
 const mapStateToProps = createStructuredSelector({
   userpage: makeSelectUserPage(),
+  loginInfo: makeSelectUserInformation(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -118,7 +113,8 @@ const withConnect = connect(
   mapDispatchToProps,
 );
 
-const withReducer = injectReducer({ key: 'userPage', reducer });
+// We need to change the state of loginForm, not of userPage
+const withReducer = injectReducer({ key: 'loginForm', reducer });
 const withSaga = injectSaga({ key: 'userPage', saga });
 
 export default compose(
