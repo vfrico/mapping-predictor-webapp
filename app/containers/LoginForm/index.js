@@ -97,6 +97,15 @@ export class LoginForm extends React.Component {
     console.log("state.signUp:"+this.state.signUp);
   }
 
+  objectIsEmpty = obj => {
+    try {
+      return Object.keys(obj).length === 0 && obj.constructor === Object
+    } catch (err) {
+      console.log("Error: "+err);
+    }
+    return false;
+  }
+
   render() {
     const { classes } = this.props;
 
@@ -124,6 +133,15 @@ export class LoginForm extends React.Component {
         <p>Need a new account? <span onClick={this.changeToSignUp}>Sign up</span></p>
         </div>;
       buttonText = "Log in";
+    }
+    console.log("LoginForm")
+    console.log(this.props);
+    if (this.props.loginform != undefined && !this.objectIsEmpty(this.props.loginform)) {
+      // If user is not empty, change to user page
+      this.props.history.push("/user");
+      console.log("change: "+this.props.loginform)
+    } else {
+      console.log("No change: "+this.props.loginform)
     }
 
     return (

@@ -7,6 +7,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { withRouter } from "react-router-dom";
 import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
@@ -48,15 +49,20 @@ const styles = theme => ({
 /* eslint-disable react/prefer-stateless-function */
 export class UserPage extends React.Component {
 
-  getFromProps = name => {
-    // this.props.loginInfo.get('email')
-    console.log(this.props)
+  getFromProps = property => {
+    console.log(this.props);
     try {
-      return this.props.loginInfo.user[name]
+      if (this.props.loginInfo.user != undefined) {
+        return this.props.loginInfo.user[property];
+      }
     } catch (error) {
-      console.log("Error: "+error)
-      return false
+      console.log("Error: "+error);
     }
+    return false;
+  }
+
+  objectIsEmpty = obj => {
+    return Object.keys(obj).length === 0 && obj.constructor === Object
   }
 
   doLogout = ()  => {
@@ -65,6 +71,10 @@ export class UserPage extends React.Component {
   }
   render() {
     const { classes } = this.props;
+    if (this.objectIsEmpty(this.props.loginInfo)) {
+      // If user is empty, then load login component
+      this.props.history.push("/login");
+    }
     return (
       <div className={classes.root}>
       <Grid container spacing={0}>
@@ -122,4 +132,5 @@ export default compose(
   withSaga,
   withConnect,
   withStyles(styles),
+  withRouter,
 )(UserPage);

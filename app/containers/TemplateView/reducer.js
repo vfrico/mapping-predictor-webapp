@@ -10,7 +10,7 @@ import { DEFAULT_ACTION, LOAD_TEMPLATES, LOADED_TEMPLATES } from './constants';
 export const initialState = fromJS({});
 
 function templateViewReducer(state = initialState, action) {
-  console.log("hello1 with action: "+JSON.stringify(action));
+  console.log("TemplateViewReducer with action: "+JSON.stringify(action));
   switch (action.type) {
     case DEFAULT_ACTION:
       var newState = state.set("new", "defaultActionOnReducer");

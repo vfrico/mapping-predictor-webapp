@@ -10,6 +10,7 @@ import { DEFAULT_ACTION, SEND_LOGIN, SUCCESSFUL_LOGIN } from './constants';
 export const initialState = fromJS({});
 
 function loginFormReducer(state = initialState, action) {
+  console.log("LoginFormReducer with action: "+JSON.stringify(action));
   switch (action.type) {
     case DEFAULT_ACTION:
       return state;
