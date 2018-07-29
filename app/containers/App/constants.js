@@ -8,3 +8,7 @@
  * Follow this format:
  * export const YOUR_ACTION_CONSTANT = 'yourproject/YourContainer/YOUR_ACTION_CONSTANT';
  */
+
+ export const GET_USER_INFO_FROM_BROWSER = 'app/GET_USER_INFO_FROM_BROWSER';
+ export const SAVE_USER_INFO_ON_BROWSER = 'app/SAVE_USER_INFO_ON_BROWSER';
+ export const USER_INFO_FROM_BROWSER_SUCC = 'app/USER_INFO_FROM_BROWSER_SUCC';

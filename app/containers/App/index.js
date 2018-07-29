@@ -24,25 +24,68 @@ import { Paper } from '@material-ui/core';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import grey from '@material-ui/core/colors/grey';
 
-export default function App() {
-  const theme = createMuiTheme({
-    palette: {
-      primary: { main: grey[700] }, // Purple and green play nicely together.
-      secondary: { main: '#11cb5f' }, // This is just green.A700 as hex.
-    },
-  });
+import { compose } from 'redux';
+import { connect } from 'react-redux';
+import { getUserInfo } from './actions';
+import injectReducer from 'utils/injectReducer';
+import reducer from './reducer';
 
-  return (
-    <div>
-      <MuiThemeProvider theme={theme}>
-        <ButtonAppBar/>
-        <Switch>
-          <Route exact path="/" component={TemplateView} />
-          <Route exact path="/login" component={LoginForm} />
-          <Route exact path="/user" component={UserPage} />
-          <Route component={NotFoundPage} />
-        </Switch>
-      </MuiThemeProvider>
-    </div>
-  );
+import injectSaga from 'utils/injectSaga';
+import saga from './saga';
+
+const theme = createMuiTheme({
+  palette: {
+    primary: { main: grey[700] }, // Purple and green play nicely together.
+    secondary: { main: '#11cb5f' }, // This is just green.A700 as hex.
+  },
+});
+
+class App extends React.Component {
+
+  //componentDidMount () {
+    //this.props.getUserInfoFromStorage();
+ // }
+
+  render () {
+    return (
+      <div>
+        <MuiThemeProvider theme={theme}>
+          <ButtonAppBar/>
+          <Switch>
+            <Route exact path="/" component={TemplateView} />
+            <Route exact path="/login" component={LoginForm} />
+            <Route exact path="/user" component={UserPage} />
+            <Route component={NotFoundPage} />
+          </Switch>
+        </MuiThemeProvider>
+      </div>
+    );
+  }
 }
+
+const mapStateToProps = (state) => {
+  return {
+      userInfo: state.get('loginForm')
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+      getUserInfoFromStorage: () => {
+          dispatch(getUserInfo());
+      },
+      saveUserInformation: (user, email, jwt) => {
+        dispatch(saveBrowserUserInfo(user, email, jwt));
+      }
+  };
+};
+
+//const withReducer = injectReducer({ key: 'loginForm', reducer });
+//const withSaga = injectSaga({ key: 'loginForm', saga });
+
+
+export default compose(
+  //withReducer,
+  //withSaga,
+  //connect(mapStateToProps, mapDispatchToProps),
+)(App);

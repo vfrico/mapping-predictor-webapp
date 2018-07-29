@@ -15,6 +15,13 @@ import { compose } from 'redux';
 import { get } from 'immutable';
 
 
+import { getUserInfo } from './actions';
+import injectReducer from 'utils/injectReducer';
+import reducer from './reducer';
+
+import injectSaga from 'utils/injectSaga';
+import saga from './saga';
+
 const whiteColor = {
   color: 'white'
 };
@@ -37,49 +44,62 @@ const styles = {
   }
 };
 
-function ButtonAppBar(props) {
-  const { classes } = props;
+class ButtonAppBar extends React.Component {
 
-  var userInfo = {};
-  if (props.userInfo != undefined) {
-    userInfo = props.userInfo.toJS();
+  componentDidMount() {
+    console.log("ComponentDidMount");
+    this.props.getUserInfoFromStorage();
   }
+/*
+  constructor(props) {
+    super(props)
+    this.props = props;
+  }*/
 
-  var loggedIn, rightComponent;
+  render () {
+    const { classes } = this.props;
 
-  console.log("Info: "+JSON.stringify(userInfo)+", de tipo: "+typeof(userInfo))
-  if (userInfo.user != undefined) {
-    loggedIn = 'yes';
-    rightComponent = <Link to="/user">
-      <IconButton>
-        <AccountCircle />
-      </IconButton>
-    </Link>;
-  } else {
-    loggedIn = 'no';
-    rightComponent = <Link to="/login">
-      <Button className={classes.button}>
-        Login
-      </Button>
-    </Link>;
+    var userInfo = {};
+    if (this.props.userInfo != undefined) {
+      userInfo = this.props.userInfo.toJS();
+    }
+
+    var loggedIn, rightComponent;
+
+    console.log("Info: "+JSON.stringify(userInfo)+", de tipo: "+typeof(userInfo))
+    if (userInfo.user != undefined) {
+      loggedIn = 'yes';
+      rightComponent = <Link to="/user">
+        <IconButton>
+          <AccountCircle />
+        </IconButton>
+      </Link>;
+    } else {
+      loggedIn = 'no';
+      rightComponent = <Link to="/login">
+        <Button className={classes.button}>
+          Login
+        </Button>
+      </Link>;
+    }
+
+    return (
+      <div className={classes.root}>
+        <AppBar position="static">
+          <Toolbar className={classes.button}>
+            <IconButton className={classes.menuButton} aria-label="Menu">
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="title" className={classes.flex}>
+              News 
+              {/* {JSON.stringify(userInfo)} {loggedIn} */}
+            </Typography>
+            {rightComponent}
+          </Toolbar>
+        </AppBar>
+      </div>
+    );
   }
-
-  return (
-    <div className={classes.root}>
-      <AppBar position="static">
-        <Toolbar className={classes.button}>
-          <IconButton className={classes.menuButton} aria-label="Menu">
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="title" className={classes.flex}>
-            News 
-            {/* {JSON.stringify(userInfo)} {loggedIn} */}
-          </Typography>
-          {rightComponent}
-        </Toolbar>
-      </AppBar>
-    </div>
-  );
 }
 
 ButtonAppBar.propTypes = {
@@ -89,19 +109,27 @@ ButtonAppBar.propTypes = {
 
 const mapStateToProps = (state) => {
   return {
-      userInfo: state.get('loginForm')
+      userInfo: state.get('buttonAppBar')
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-      onMenuClick: (id) => {
-          dispatch();
-      }
+      getUserInfoFromStorage: () => {
+        console.log("Before dispatch getUserInfo");
+        dispatch(getUserInfo());
+    },
   };
 };
 
+const withReducer = injectReducer({ key: 'buttonAppBar', reducer });
+const withSaga = injectSaga({ key: 'buttonAppBar', saga });
+
+
+
 export default compose(
+  withReducer,
+  withSaga,
   connect(mapStateToProps, mapDispatchToProps),
   withStyles(styles),
 )(ButtonAppBar);
