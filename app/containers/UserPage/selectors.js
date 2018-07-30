@@ -5,13 +5,18 @@ import { initialState } from './reducer';
  * Direct selector to the userPage state domain
  */
 
-const selectUserPageDomain = state => state.get('userPage', initialState);
-
+const selectUserPageDomain = state => {
+  console.log("all state 3: "+JSON.stringify(state));
+  return state.get('userPage', initialState);
+}
 /**
  * Other specific selectors
  */
 
-const selectUserInformation = state => state.get('loginForm', initialState);
+const selectUserInformation = state => {
+  console.log("all state 4: "+JSON.stringify(state));
+  return state.get('loginForm', initialState);
+}
 
 /**
  * Default selector used by UserPage

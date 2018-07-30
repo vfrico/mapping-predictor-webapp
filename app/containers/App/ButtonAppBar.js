@@ -18,6 +18,7 @@ import { get } from 'immutable';
 import { getUserInfo } from './actions';
 import injectReducer from 'utils/injectReducer';
 import reducer from './reducer';
+import loginFormReducer from '../LoginForm/reducer';
 
 import injectSaga from 'utils/injectSaga';
 import saga from './saga';
@@ -124,7 +125,8 @@ const mapDispatchToProps = (dispatch) => {
 
 const withReducer = injectReducer({ key: 'buttonAppBar', reducer });
 const withSaga = injectSaga({ key: 'buttonAppBar', saga });
-
+// Needs the loginFormReducer to update the state of already logged in user
+const withSecondReducer = injectReducer({ key: 'loginForm', reducer: loginFormReducer });
 
 
 export default compose(
@@ -132,4 +134,5 @@ export default compose(
   withSaga,
   connect(mapStateToProps, mapDispatchToProps),
   withStyles(styles),
+  withSecondReducer,
 )(ButtonAppBar);

@@ -19,7 +19,6 @@ function userPageReducer(state = initialState, action) {
       // Action used to launch API request
       return state;
     case LOGOUT_SUCCESS:
-      // TODO: delete the user info on browser
       var newState = state.remove('user');
       return newState;
     default:

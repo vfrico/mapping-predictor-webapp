@@ -6,6 +6,7 @@
 
 import { fromJS } from 'immutable';
 import { DEFAULT_ACTION, SEND_LOGIN, SUCCESSFUL_LOGIN } from './constants';
+import { LOGOUT_ACTION, LOGOUT_SUCCESS } from '../UserPage/constants';
 
 export const initialState = fromJS({});
 
@@ -29,6 +30,14 @@ function loginFormReducer(state = initialState, action) {
         password: action.password,
         email: action.email,
       });
+      return newState;
+
+    case LOGOUT_ACTION:
+      // Action used to launch API request
+      return state;
+
+    case LOGOUT_SUCCESS:
+      var newState = state.remove('user');
       return newState;
 
     default:

@@ -22,6 +22,7 @@ import { Button, withStyles } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import { logoutAction } from './actions';
+import loginFormReducer from '../LoginForm/reducer';
 
 const styles = theme => ({
   textField: {
@@ -124,13 +125,16 @@ const withConnect = connect(
 );
 
 // We need to change the state of loginForm, not of userPage
-const withReducer = injectReducer({ key: 'loginForm', reducer });
+//const withReducer = injectReducer({ key: 'loginForm', reducer });
 const withSaga = injectSaga({ key: 'userPage', saga });
+// Needs the loginFormReducer to update the state of already logged in user
+const withSecondReducer = injectReducer({ key: 'loginForm', reducer: loginFormReducer });
+
 
 export default compose(
-  withReducer,
   withSaga,
   withConnect,
   withStyles(styles),
   withRouter,
+  withSecondReducer,
 )(UserPage);
