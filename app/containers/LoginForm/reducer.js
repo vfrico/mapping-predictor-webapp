@@ -5,7 +5,7 @@
  */
 
 import { fromJS } from 'immutable';
-import { DEFAULT_ACTION, SEND_LOGIN, SUCCESSFUL_LOGIN, ERROR_LOGIN, DELETE_ERROR_LOGIN } from './constants';
+import { DEFAULT_ACTION, SEND_LOGIN, SUCCESSFUL_LOGIN, ERROR_LOGIN, DELETE_ERROR_LOGIN, SIGN_UP_ERROR, SIGN_UP_SUCCESS, SEND_SIGN_UP } from './constants';
 import { LOGOUT_ACTION, LOGOUT_SUCCESS } from '../UserPage/constants';
 
 export const initialState = fromJS({});
@@ -50,6 +50,21 @@ function loginFormReducer(state = initialState, action) {
     case DELETE_ERROR_LOGIN:
       var newState = state.remove("error");
       return newState;
+
+    case SIGN_UP_ERROR:
+      var newState = state.set("error", {
+        username: action.username,
+        error: action.error,
+      })
+      return newState;
+
+    case SIGN_UP_SUCCESS:
+      // TODO: The saga will send the login action
+      return state;
+
+    case SEND_SIGN_UP:
+      // TODO: The saga will fire api call
+      return state;
 
     default:
       return state;

@@ -23,7 +23,7 @@ import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 
 import UserForm from '../../components/UserForm';
-import { sendLogin } from './actions';
+import { sendLogin, sendSignUp } from './actions';
 
 const styles = theme => ({
   container: {
@@ -81,11 +81,14 @@ export class LoginForm extends React.Component {
   };
 
   sendLoginForm = () => {
-    console.log("Click!!: "+this.state.name)
-
-    // TODO: if is a signup, first create the user and then login
-
-    this.props.dispatch(sendLogin(this.state.userName, this.state.password));
+    console.log("Click!!: "+JSON.stringify(this.state))
+    if (this.state.signUp) {
+      // Send sign up form
+      this.props.dispatch(sendSignUp(this.state.userName, this.state.password, this.state.email))
+    } else {
+      // Normal login
+      this.props.dispatch(sendLogin(this.state.userName, this.state.password));
+    }
   }
 
   changeToSignUp = () => {
@@ -174,7 +177,7 @@ export class LoginForm extends React.Component {
               <div className={classes.login}>
                 <h1>{buttonText}</h1>
               </div>
-              <p>{JSON.stringify(this.state)}</p>
+              {/* <p>{JSON.stringify(this.state)}</p> */}
               <div className={classes.login}>
                 <TextField
                   id="userName"

@@ -92,7 +92,7 @@ export class UserPage extends React.Component {
                 Email: {this.getFromProps('email')}
               </div>
             </div>
-            <span>{JSON.stringify(this.props.loginInfo)}</span>
+            {/* <span>{JSON.stringify(this.props.loginInfo)}</span> */}
             <Button onClick={this.doLogout}>
               Logout
             </Button>

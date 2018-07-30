@@ -9,6 +9,7 @@ class ApiCalls {
         // ES6 needs manual binding :(
         this.userLogin = this.userLogin.bind(this);
         this.userLogout = this.userLogout.bind(this);
+        this.userSignUp = this.userSignUp.bind(this);
     }
 
     userLogin(username, password) {
@@ -33,6 +34,20 @@ class ApiCalls {
             headers: {
                 ... this.defaultHeaders,
                 "Authorization": token,
+            }
+        })
+    }
+
+    userSignUp(username, password, email) {
+        return fetch(this.baseUri + '/users/', {
+            method: 'POST',
+            body: JSON.stringify({
+                username,
+                password_md5: password,
+                email,
+            }),
+            headers: {
+                ... this.defaultHeaders,
             }
         })
     }
