@@ -23,6 +23,7 @@ import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import { logoutAction } from './actions';
 import loginFormReducer from '../LoginForm/reducer';
+import buttonAppBarReducer from '../App/reducer';
 
 const styles = theme => ({
   textField: {
@@ -68,7 +69,7 @@ export class UserPage extends React.Component {
 
   doLogout = ()  => {
     console.log("Execute logout");
-    this.props.dispatch(logoutAction());
+    this.props.dispatch(logoutAction(this.getFromProps('username'), this.getFromProps('jwt')));
   }
   render() {
     const { classes } = this.props;
@@ -91,7 +92,7 @@ export class UserPage extends React.Component {
                 Email: {this.getFromProps('email')}
               </div>
             </div>
-            {JSON.stringify(this.props.loginInfo)}
+            <span>{JSON.stringify(this.props.loginInfo)}</span>
             <Button onClick={this.doLogout}>
               Logout
             </Button>
@@ -125,11 +126,12 @@ const withConnect = connect(
 );
 
 // We need to change the state of loginForm, not of userPage
-//const withReducer = injectReducer({ key: 'loginForm', reducer });
+
 const withSaga = injectSaga({ key: 'userPage', saga });
 // Needs the loginFormReducer to update the state of already logged in user
 const withSecondReducer = injectReducer({ key: 'loginForm', reducer: loginFormReducer });
-
+// Needs this reducer to notify Nav Bar the user logout
+const withReducerNavBar = injectReducer({ key: 'buttonAppBar', reducer: buttonAppBarReducer });
 
 export default compose(
   withSaga,
@@ -137,4 +139,5 @@ export default compose(
   withStyles(styles),
   withRouter,
   withSecondReducer,
+  withReducerNavBar,
 )(UserPage);

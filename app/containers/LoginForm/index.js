@@ -170,7 +170,7 @@ export class LoginForm extends React.Component {
         <Grid item xs={3}/>
         <Grid item xs={6}>
           <Paper className={classes.paper}>
-            <form className={classes.container} noValidate autoComplete="off">
+            <form className={classes.container}>
               <div className={classes.login}>
                 <h1>{buttonText}</h1>
               </div>
@@ -194,7 +194,7 @@ export class LoginForm extends React.Component {
                   margin="normal"
                 />
                 {emailForm}
-                {errorElement}
+                <span>{errorElement}</span>
                 <Button onClick={this.sendLoginForm}>
                   {buttonText}
                 </Button>

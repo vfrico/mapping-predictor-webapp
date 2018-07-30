@@ -7,6 +7,8 @@
 import { fromJS } from 'immutable';
 import { GET_USER_INFO_FROM_BROWSER, USER_INFO_FROM_BROWSER_SUCC, SAVE_USER_INFO_ON_BROWSER } from './constants';
 
+import { LOGOUT_SUCCESS } from '../UserPage/constants';
+
 export const initialState = fromJS({});
 
 function appReducer(state = initialState, action) {
@@ -22,7 +24,12 @@ function appReducer(state = initialState, action) {
         jwt: action.jwt,
       });
       return newState;
-    default:
+    
+    case LOGOUT_SUCCESS:
+      var newState = state.remove('user');
+      return newState;
+    
+      default:
       return state;
   }
 }
