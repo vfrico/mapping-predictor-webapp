@@ -50,6 +50,9 @@ const styles = theme => ({
     // flexGrow: 1,
     marginTop: '2em'
   },
+  error: {
+    color: "red",
+  },
   paper: {
     padding: theme.spacing.unit * 2,
     textAlign: 'center',
@@ -82,7 +85,7 @@ export class LoginForm extends React.Component {
 
     // TODO: if is a signup, first create the user and then login
 
-    this.props.dispatch(sendLogin("username", "password"));
+    this.props.dispatch(sendLogin(this.state.userName, this.state.password));
   }
 
   changeToSignUp = () => {
@@ -136,13 +139,30 @@ export class LoginForm extends React.Component {
     }
     console.log("LoginForm")
     console.log(this.props);
-    if (this.props.loginform != undefined && !this.objectIsEmpty(this.props.loginform)) {
+    if (this.props.loginform != undefined && !this.objectIsEmpty(this.props.loginform) &&
+        this.props.loginform.user != undefined && !this.objectIsEmpty(this.props.loginform.user)) {
       // If user is not empty, change to user page
       this.props.history.push("/user");
       console.log("change: "+this.props.loginform)
     } else {
       console.log("No change: "+this.props.loginform)
     }
+
+    // Error handling
+    var errorElement = undefined;
+    if (this.props.loginform.error != undefined) {
+      
+      var errormsg = "";
+
+      if (this.props.loginform.error.error.msg != undefined) {
+        errormsg  = this.props.loginform.error.error.msg;
+      }
+
+      errorElement = <span className={classes.error}>
+        Error is: {errormsg}</span>;
+    }
+    
+
 
     return (
       <div className={classes.root}>
@@ -174,7 +194,7 @@ export class LoginForm extends React.Component {
                   margin="normal"
                 />
                 {emailForm}
-                
+                {errorElement}
                 <Button onClick={this.sendLoginForm}>
                   {buttonText}
                 </Button>

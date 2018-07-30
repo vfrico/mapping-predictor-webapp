@@ -4,7 +4,7 @@
  *
  */
 
-import { DEFAULT_ACTION, SEND_LOGIN, SUCCESSFUL_LOGIN } from './constants';
+import { DEFAULT_ACTION, SEND_LOGIN, SUCCESSFUL_LOGIN, ERROR_LOGIN, DELETE_ERROR_LOGIN } from './constants';
 
 export function defaultAction() {
   return {
@@ -20,11 +20,25 @@ export function sendLogin(username, password) {
   }
 }
 
-export function successfulLogin(username, password, email) {
+export function successfulLogin(username, email, jwt) {
   return {
     type: SUCCESSFUL_LOGIN,
     username,
-    password,
     email,
+    jwt,
+  }
+}
+
+export function errorLogin(username, error) {
+  return {
+    type: ERROR_LOGIN,
+    username,
+    error,
+  }
+}
+
+export function deleteErrorLogin() {
+  return {
+    type: DELETE_ERROR_LOGIN,
   }
 }

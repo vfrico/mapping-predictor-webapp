@@ -5,7 +5,7 @@
  */
 
 import { fromJS } from 'immutable';
-import { DEFAULT_ACTION, SEND_LOGIN, SUCCESSFUL_LOGIN } from './constants';
+import { DEFAULT_ACTION, SEND_LOGIN, SUCCESSFUL_LOGIN, ERROR_LOGIN, DELETE_ERROR_LOGIN } from './constants';
 import { LOGOUT_ACTION, LOGOUT_SUCCESS } from '../UserPage/constants';
 
 export const initialState = fromJS({});
@@ -27,7 +27,7 @@ function loginFormReducer(state = initialState, action) {
       console.log("SUCCEsful login: "+JSON.stringify(action));
       var newState = state.set("user", {
         username: action.username,
-        password: action.password,
+        jwt: action.jwt,
         email: action.email,
       });
       return newState;
@@ -38,6 +38,17 @@ function loginFormReducer(state = initialState, action) {
 
     case LOGOUT_SUCCESS:
       var newState = state.remove('user');
+      return newState;
+
+    case ERROR_LOGIN:
+      var newState = state.set("error", {
+        username: action.username,
+        error: action.error
+      })
+      return newState;
+
+    case DELETE_ERROR_LOGIN:
+      var newState = state.remove("error");
       return newState;
 
     default:
