@@ -18,8 +18,13 @@ import reducer from './reducer';
 import saga from './saga';
 import messages from './messages';
 import { defaultAction, loadTemplates } from './actions';
-import { Button } from '@material-ui/core';
 import TemplateItem from '../../components/TemplateItem';
+
+
+import MenuItem from '@material-ui/core/MenuItem';
+import TextField from '@material-ui/core/TextField';
+import { Button } from '@material-ui/core';
+
 
 /* eslint-disable react/prefer-stateless-function */
 export class TemplateView extends React.Component {
@@ -27,7 +32,7 @@ export class TemplateView extends React.Component {
     super(props);
     console.log(props);
     this.state = {
-      lang: "es"
+      lang: "es",
     };
     // props.dispatch(defaultAction());
     // this.sleep(4000);
@@ -35,17 +40,23 @@ export class TemplateView extends React.Component {
     // console.log(props);
   }
 
+  handleChange = event => {
+    this.setState({
+      lang: event.target.value,
+    });
+  };
+
   componentDidMount() {
-    this.props.dispatch(loadTemplates(this.state.lang));
+    this.callFunction();
   }
 
   sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
+  /* Calls the API to get templates */
   callFunction = () => {
-    console.log("This is a call");
-    this.props.dispatch(loadTemplates());
+    this.props.dispatch(loadTemplates(this.state.lang));
   }
 
   render() {
@@ -61,11 +72,25 @@ export class TemplateView extends React.Component {
     return (
       <div>
         {/* <FormattedMessage {...messages.header} /> */}
+
+        <TextField
+          id="templates-lang"
+          select
+          label="Templates language"
+          value={this.state.lang}
+          onChange={this.handleChange}
+          margin="normal"
+        >
+          <MenuItem value="es">es</MenuItem>
+          <MenuItem value="en">en</MenuItem>
+        </TextField>
+        <Button onClick={this.callFunction}>Get templates</Button>
+
         <div>
           {templatesList}
         </div>
-        <Button onClick={this.callFunction}>Call function</Button>
         <p>{JSON.stringify(this.props.templateview)}</p>
+        <p>{JSON.stringify(this.state)}</p>
       </div>
     );
   }

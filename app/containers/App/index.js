@@ -20,6 +20,7 @@ import ButtonAppBar from './ButtonAppBar';
 import LoginForm from '../LoginForm';
 import UserPage from '../UserPage';
 import TemplateView from '../TemplateView';
+import TemplatePage from '../TemplatePage';
 import { Paper } from '@material-ui/core';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import grey from '@material-ui/core/colors/grey';
@@ -55,6 +56,7 @@ class App extends React.Component {
             <Route exact path="/" component={TemplateView} />
             <Route exact path="/login" component={LoginForm} />
             <Route exact path="/user" component={UserPage} />
+            <Route exact path="/template/:lang/:templateName" component={TemplatePage} />
             <Route component={NotFoundPage} />
           </Switch>
         </MuiThemeProvider>
