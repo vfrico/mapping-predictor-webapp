@@ -22,7 +22,6 @@ import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 
-import UserForm from '../../components/UserForm';
 import { sendLogin, sendSignUp } from './actions';
 
 const styles = theme => ({
