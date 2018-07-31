@@ -5,11 +5,12 @@ import { DEFAULT_ACTION, LOAD_TEMPLATES, LOGOUT_ACTION, LOGOUT_ERROR } from './c
 import { loadedTemplates, logoutAction, logoutSuccess, logoutError, deleteErrorUserPage } from './actions';
 import BrowserStorage from '../../api/browserStorage';
 import ApiCalls from '../../api/api';
+import { API_ROUTE } from '../../api/defaults';
 
 function* apiCaller(action) {
 
   console.log("Api caller for logout. Action="+JSON.stringify(action))
-  var api = new ApiCalls('http://localhost:8080/predictor/webapi');
+  var api = new ApiCalls(API_ROUTE());
   // yield call();  // To really call 
   try {
     const response = yield call(api.userLogout, action.username, action.jwt);

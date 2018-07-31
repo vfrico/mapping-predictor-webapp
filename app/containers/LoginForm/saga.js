@@ -5,6 +5,7 @@ import { SEND_LOGIN, ERROR_LOGIN, SEND_SIGN_UP, SIGN_UP_ERROR } from "./constant
 import { successfulLogin, errorLogin, deleteErrorLogin, sendLogin, signUpSuccess, signUpError } from "./actions";
 import BrowserStorage from '../../api/browserStorage';
 import ApiCalls from '../../api/api';
+import { API_ROUTE } from '../../api/defaults';
 
 // import { take, call, put, select } from 'redux-saga/effects';
 
@@ -27,7 +28,7 @@ var objectIsEmpty = obj => {
 
 function* apiCaller(action) {
   console.log("Api caller for send login");
-  var api = new ApiCalls('http://localhost:8080/predictor/webapi');
+  var api = new ApiCalls(API_ROUTE());
   try {
     const response = yield call(api.userLogin, action.username, action.password);
     
@@ -59,7 +60,7 @@ function* apiCaller(action) {
 
 function* apiSignUpCaller(action) {
   console.log("Api caller for sign up");
-  var api = new ApiCalls('http://localhost:8080/predictor/webapi');
+  var api = new ApiCalls(API_ROUTE());
   try {
     const response = yield call(api.userSignUp, action.username, action.password, action.email);
     
