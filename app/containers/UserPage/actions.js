@@ -4,7 +4,7 @@
  *
  */
 
-import { DEFAULT_ACTION, LOGOUT_ACTION, LOGOUT_SUCCESS, LOGOUT_ERROR } from './constants';
+import { DEFAULT_ACTION, LOGOUT_ACTION, LOGOUT_SUCCESS, LOGOUT_ERROR, LOGOUT_ERROR_DELETE } from './constants';
 
 export function defaultAction() {
   return {
@@ -32,4 +32,10 @@ export function logoutError(username, error) {
     username,
     error,
   };
+}
+
+export function deleteErrorUserPage() {
+  return {
+    type: LOGOUT_ERROR_DELETE,
+  }
 }

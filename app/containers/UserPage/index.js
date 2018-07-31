@@ -38,6 +38,9 @@ const styles = theme => ({
     textAlign: 'center',
     color: theme.palette.text.secondary,
   },
+  error: {
+    color: "red",
+  },
   container: {
     width: "100%",
     display: 'flex',
@@ -77,6 +80,21 @@ export class UserPage extends React.Component {
       // If user is empty, then load login component
       this.props.history.push("/login");
     }
+
+    // Error handling
+    var errorElement = undefined;
+    if (this.props.loginInfo.error != undefined) {
+      
+      var errormsg = "";
+      console.log(this.props.loginInfo.error)
+      if (this.props.loginInfo.error.error != undefined) {
+        errormsg  = JSON.stringify(this.props.loginInfo.error.error)
+      }
+      
+      errorElement = <span className={classes.error}>
+        Error is: {errormsg}</span>;
+    }
+
     return (
       <div className={classes.root}>
       <Grid container spacing={0}>
@@ -93,6 +111,7 @@ export class UserPage extends React.Component {
               </div>
             </div>
             {/* <span>{JSON.stringify(this.props.loginInfo)}</span> */}
+            {errorElement}<br/>
             <Button onClick={this.doLogout}>
               Logout
             </Button>

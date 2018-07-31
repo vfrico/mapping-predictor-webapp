@@ -1,7 +1,7 @@
 import { delay } from 'redux-saga'
 import { call, put, takeEvery, takeLatest, all } from 'redux-saga/effects'
 
-import { SEND_LOGIN, ERROR_LOGIN, SEND_SIGN_UP } from "./constants";
+import { SEND_LOGIN, ERROR_LOGIN, SEND_SIGN_UP, SIGN_UP_ERROR } from "./constants";
 import { successfulLogin, errorLogin, deleteErrorLogin, sendLogin, signUpSuccess, signUpError } from "./actions";
 import BrowserStorage from '../../api/browserStorage';
 import ApiCalls from '../../api/api';
@@ -39,6 +39,7 @@ function* apiCaller(action) {
         brwst.saveUser(user.username, user.email, user.jwt);
   
         // Update state of successful login
+        yield put(deleteErrorLogin())
         yield put(successfulLogin(user.username, user.email, user.jwt));
       }
     } else {
@@ -49,9 +50,10 @@ function* apiCaller(action) {
     }
     
   } catch (e) {
-    console.log("err="+e);
+    console.log("error is ="+e);
     console.error(e)
-    yield put(errorLogin(action.user, e));
+    console.log("Message: "+e.message)
+    yield put(errorLogin(action.username, {msg: e.message}));
   }  
 }
 
@@ -64,20 +66,22 @@ function* apiSignUpCaller(action) {
     if (response.status === 201) {
       const user = yield call([response, response.json]);
 
+      yield put(deleteErrorLogin())
+
       //yield put(signUpSuccess(user.username, user.password))
       yield put(sendLogin(user.username, user.password_md5));
-
     } else {
       console.log("Error found on API:")
       const err = yield call([response, response.json])
       console.log("The error is: "+JSON.stringify(err))
-      yield put(signUpError(action.user, err));
+      yield put(signUpError(action.username, err));
     }
     
   } catch (e) {
-    console.log("err="+e);
+    console.log("error is ="+e);
     console.error(e)
-    yield put(signUpError(action.user, e));
+    console.log("Message: "+e.message)
+    yield put(signUpError(action.username, {msg: e.message}));
   }
 
 }
@@ -95,6 +99,7 @@ function* sendLoginUserSaga() {
 
 function* errorLoginSaga() {
   yield takeEvery(ERROR_LOGIN, delayDeletion);
+  yield takeEvery(SIGN_UP_ERROR, delayDeletion);
 }
 
 function* sendSignUpSaga() {

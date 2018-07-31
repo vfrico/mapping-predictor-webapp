@@ -154,11 +154,15 @@ export class LoginForm extends React.Component {
     // Error handling
     var errorElement = undefined;
     if (this.props.loginform.error != undefined) {
-      
+      console.log("ERROR HANDLING")
+      console.log(this.props.loginform.error)
       var errormsg = "";
+      console.log(this.props.loginform.error.error)
 
       if (this.props.loginform.error.error.msg != undefined) {
         errormsg  = this.props.loginform.error.error.msg;
+        console.log(errormsg)
+        console.log(this.props.loginform.error)
       }
 
       errorElement = <span className={classes.error}>

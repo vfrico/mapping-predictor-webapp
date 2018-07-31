@@ -1,8 +1,8 @@
 import { delay } from 'redux-saga'
 import { call, put, takeEvery, takeLatest, all } from 'redux-saga/effects'
 // import { take, call, put, select } from 'redux-saga/effects';
-import { DEFAULT_ACTION, LOAD_TEMPLATES, LOGOUT_ACTION } from './constants';
-import { loadedTemplates, logoutAction, logoutSuccess, logoutError } from './actions';
+import { DEFAULT_ACTION, LOAD_TEMPLATES, LOGOUT_ACTION, LOGOUT_ERROR } from './constants';
+import { loadedTemplates, logoutAction, logoutSuccess, logoutError, deleteErrorUserPage } from './actions';
 import BrowserStorage from '../../api/browserStorage';
 import ApiCalls from '../../api/api';
 
@@ -21,6 +21,7 @@ function* apiCaller(action) {
 
       // send actual action
       yield put(logoutSuccess());
+      yield put(deleteErrorUserPage());
       
     } else {
       console.log("Error found on API:")
@@ -30,19 +31,33 @@ function* apiCaller(action) {
     }
     
   } catch (e) {
-    console.log("err="+e);
+    console.log("error on logout: "+e);
     console.error(e)
-    yield put(logoutError(action.user, e));
+    var errorString = e.message;
+    console.log("ErrorString: "+errorString)
+    yield put(logoutError(action.username, e.message));
   }
 }
 
+
+function* delayErrorDeletion(action) {
+  console.log("Delete error msg on userPage");
+  // yield call();  // To really call to api // TODO
+  yield delay(10 * 1000);
+  yield put(deleteErrorUserPage());
+}
 
 function* sagaApiCall() {
   yield takeEvery(LOGOUT_ACTION, apiCaller);
 }
 
+function* sagaApiCallDelete() {
+  yield takeEvery(LOGOUT_ERROR, delayErrorDeletion);
+}
+
 export default function* rootSaga() {
   yield all([
-    sagaApiCall()
+    sagaApiCall(),
+    sagaApiCallDelete()
   ]);
 }
