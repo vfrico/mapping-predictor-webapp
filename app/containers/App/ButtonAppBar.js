@@ -14,6 +14,7 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { get } from 'immutable';
 
+import { fromJS } from 'immutable';
 
 import { getUserInfo } from './actions';
 import injectReducer from 'utils/injectReducer';
@@ -108,9 +109,21 @@ ButtonAppBar.propTypes = {
   userInfo: PropTypes.object,
 };
 
+const mergePropsObject = (obj1, obj2) => {
+  try {
+    console.log("MERGE")
+    console.log(obj1.toJS(), obj2.toJS())
+    var merged = { ... obj1.toJS(), ... obj2.toJS()}
+    console.log(merged)
+    return fromJS(merged)
+  } catch (e) {
+    return fromJS({})
+  }
+}
+
 const mapStateToProps = (state) => {
   return {
-      userInfo: state.get('buttonAppBar')
+      userInfo: mergePropsObject(state.get('buttonAppBar'), state.get('loginForm'))
   };
 };
 
