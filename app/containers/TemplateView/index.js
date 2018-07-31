@@ -19,6 +19,7 @@ import saga from './saga';
 import messages from './messages';
 import { defaultAction, loadTemplates } from './actions';
 import { Button } from '@material-ui/core';
+import TemplateItem from '../../components/TemplateItem';
 
 /* eslint-disable react/prefer-stateless-function */
 export class TemplateView extends React.Component {
@@ -26,13 +27,18 @@ export class TemplateView extends React.Component {
     super(props);
     console.log(props);
     this.state = {
-        jaja:"jeje"
+      lang: "es"
     };
-    props.dispatch(defaultAction());
-    this.sleep(4000);
-    console.log("new props");
-    console.log(props);
+    // props.dispatch(defaultAction());
+    // this.sleep(4000);
+    // console.log("new props");
+    // console.log(props);
   }
+
+  componentDidMount() {
+    this.props.dispatch(loadTemplates(this.state.lang));
+  }
+
   sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
@@ -43,12 +49,23 @@ export class TemplateView extends React.Component {
   }
 
   render() {
+
+    var templatesList = undefined;
+    if (this.props.templateview.templates != undefined) {
+      
+      templatesList = this.props.templateview.templates.map(t => {
+        return <TemplateItem template={t}/>
+      })
+    }
+
     return (
       <div>
-        <FormattedMessage {...messages.header} />
-        <p>{this.state.jaja}</p>
-        <p>{JSON.stringify(this.props.templateview)}</p>
+        {/* <FormattedMessage {...messages.header} /> */}
+        <div>
+          {templatesList}
+        </div>
         <Button onClick={this.callFunction}>Call function</Button>
+        <p>{JSON.stringify(this.props.templateview)}</p>
       </div>
     );
   }

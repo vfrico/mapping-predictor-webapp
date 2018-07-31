@@ -41,6 +41,10 @@ const styles = {
     marginRight: 20,
     ... whiteColor,
   },
+  textLink: {
+    textDecoration: 'none',
+    ... whiteColor,
+  },
   button: {
     ... whiteColor,
   }
@@ -93,7 +97,7 @@ class ButtonAppBar extends React.Component {
               <MenuIcon />
             </IconButton>
             <Typography variant="title" className={classes.flex}>
-              News 
+              <Link to="/" className={classes.textLink}>DBpedia mappings</Link>
               {/* {JSON.stringify(userInfo)} {loggedIn} */}
             </Typography>
             {rightComponent}

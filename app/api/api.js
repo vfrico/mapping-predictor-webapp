@@ -10,6 +10,7 @@ class ApiCalls {
         this.userLogin = this.userLogin.bind(this);
         this.userLogout = this.userLogout.bind(this);
         this.userSignUp = this.userSignUp.bind(this);
+        this.getTemplatesByLanguage = this.getTemplatesByLanguage.bind(this);
     }
 
     userLogin(username, password) {
@@ -50,6 +51,16 @@ class ApiCalls {
                 ... this.defaultHeaders,
             }
         })
+    }
+
+    getTemplatesByLanguage(language) {
+        return fetch(this.baseUri + '/templates?lang=' + language , {
+            method: 'GET',
+            headers: {
+                ... this.defaultHeaders,
+            }
+        })
+
     }
 }
 

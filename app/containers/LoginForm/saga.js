@@ -55,7 +55,7 @@ function* apiCaller(action) {
     console.error(e)
     console.log("Message: "+e.message)
     yield put(errorLogin(action.username, {msg: e.message}));
-  }  
+  }
 }
 
 function* apiSignUpCaller(action) {

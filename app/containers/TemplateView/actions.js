@@ -4,7 +4,7 @@
  *
  */
 
-import { DEFAULT_ACTION, LOAD_TEMPLATES, LOADED_TEMPLATES } from './constants';
+import { DEFAULT_ACTION, LOAD_TEMPLATES, LOADED_TEMPLATES, LOADED_TEMPLATES_ERROR, DELETE_LOADED_TEMPLATES_ERROR } from './constants';
 
 export function defaultAction() {
   return {
@@ -13,15 +13,29 @@ export function defaultAction() {
   }
 }
 
-export function loadTemplates() {
+export function loadTemplates(language) {
   return {
-    type: LOAD_TEMPLATES
+    type: LOAD_TEMPLATES,
+    language,
   }
 }
 
 export function loadedTemplates(templates) {
   return {
     type: LOADED_TEMPLATES,
-    templates
+    templates,
+  }
+}
+
+export function loadedTemplatesError(error) {
+  return {
+    type: LOADED_TEMPLATES_ERROR,
+    error,
+  }
+}
+
+export function deleteLoadedTemplatesError() {
+  return {
+    type: DELETE_LOADED_TEMPLATES_ERROR,
   }
 }

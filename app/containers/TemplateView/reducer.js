@@ -5,7 +5,7 @@
  */
 
 import { fromJS } from 'immutable';
-import { DEFAULT_ACTION, LOAD_TEMPLATES, LOADED_TEMPLATES } from './constants';
+import { DEFAULT_ACTION, LOAD_TEMPLATES, LOADED_TEMPLATES, LOADED_TEMPLATES_ERROR, DELETE_LOADED_TEMPLATES_ERROR } from './constants';
 
 export const initialState = fromJS({});
 
@@ -25,6 +25,14 @@ function templateViewReducer(state = initialState, action) {
       var newState = state.set("templates", action.templates);
       return newState;
 
+    case LOADED_TEMPLATES_ERROR:
+      console.log("Templates loaded with error: "+JSON.stringify(action));
+      var newState = state.set("error", action.error);
+      return newState;
+
+    case DELETE_LOADED_TEMPLATES_ERROR:
+      var newState = state.remove("error");
+      return newState;
     default:
       return state;
   }
