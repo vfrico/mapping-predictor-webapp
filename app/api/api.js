@@ -13,6 +13,7 @@ class ApiCalls {
         this.userSignUp = this.userSignUp.bind(this);
         this.getTemplatesByLanguage = this.getTemplatesByLanguage.bind(this);
         this.getTemplateInfo = this.getTemplateInfo.bind(this);
+        this.sendUserVote = this.sendUserVote.bind(this);
     }
 
     userLogin(username, password) {
@@ -72,6 +73,10 @@ class ApiCalls {
                 ... this.defaultHeaders,
             }
         })
+    }
+
+    sendUserVote(annotationId, voteType, username, jwt) {
+        return fetch();
     }
 }
 

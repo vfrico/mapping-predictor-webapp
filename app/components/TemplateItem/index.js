@@ -10,7 +10,6 @@ import PropTypes from 'prop-types';
 import { Paper, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import { Link } from 'react-router-dom';
 import StyledLink from '../StyledLink';
 
 // import styled from 'styled-components';

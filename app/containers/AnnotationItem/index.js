@@ -18,6 +18,8 @@ import reducer from './reducer';
 import saga from './saga';
 import messages from './messages';
 import { Grid, Button } from '@material-ui/core';
+import { sendVote } from './actions';
+import { VOTE_CORRECT, VOTE_WRONG } from '../../api/defaults';
 
 /* eslint-disable react/prefer-stateless-function */
 export class AnnotationItem extends React.Component {
@@ -35,32 +37,56 @@ export class AnnotationItem extends React.Component {
       propB: props.annotation.propB,
       templateA: props.annotation.templateA,
       templateB: props.annotation.templateB,
-      id: props.annotation.id
+      id: props.annotation.id,
+      votes: props.annotation.votes
     }
   }
 
+  sendVoteIncorrect() {
+    console.log("Wrong mapping")
+    this.props.dispatch(sendVote(VOTE_CORRECT, this.state.id, user, jwt))
+  }
+
+  sendVoteValid() {
+    console.log("Valid mapping")
+    this.props.dispatch(sendVote(VOTE_WRONG, this.state.id, user, jwt))
+  }
+
   render() {
+
+    // TODO: Show advanced information about previous votation
+    // Maybe a new component?
+    var res = undefined;
+    if (this.state.votes != undefined && this.state.votes.length != 0) {
+      try {
+        res = this.state.votes[0].vote
+      }
+      catch(e) { }
+    }
+
     return (
       <Grid container>
-        <Grid item>
+        <Grid item xs={4}>
           <b>{this.state.langA}</b>
           <p>{this.state.templateA}</p>
           <p>{this.state.attributeA}</p>
           <p>{this.state.propA}</p>
         </Grid>
-        →
-        <Grid item>
+        <Grid item xs={4}>
           <b>{this.state.langB}</b>
           <p>{this.state.templateB}</p>
           <p>{this.state.attributeB}</p>
           <p>{this.state.propB}</p>
         </Grid>
-        <Button>
+        <Grid item xs={4}>
+        <Button onClick={sendVoteValid()}>
           Valid mapping
         </Button>
-        <Button>
+        <Button onClick={sendVoteIncorrect()}>
           Incorrect mapping
         </Button>
+        </Grid>
+        {res}
       </Grid>
     );
   }
