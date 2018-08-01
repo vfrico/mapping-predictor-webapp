@@ -23,8 +23,15 @@ import TemplateItem from '../../components/TemplateItem';
 
 import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
-import { Button } from '@material-ui/core';
+import { Button, withStyles } from '@material-ui/core';
 
+
+const styles = theme => ({
+  container: {
+    width: '90%',
+    margin: 'auto',
+  }
+});
 
 /* eslint-disable react/prefer-stateless-function */
 export class TemplateView extends React.Component {
@@ -69,8 +76,10 @@ export class TemplateView extends React.Component {
       })
     }
 
+    const { classes } = this.props;
+
     return (
-      <div>
+      <div className={classes.container}>
         {/* <FormattedMessage {...messages.header} /> */}
 
         <TextField
@@ -122,4 +131,5 @@ export default compose(
   withReducer,
   withSaga,
   withConnect,
+  withStyles(styles),
 )(TemplateView);

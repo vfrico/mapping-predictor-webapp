@@ -7,9 +7,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { Paper } from '@material-ui/core';
+import { Paper, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
+import { Link } from 'react-router-dom';
+import StyledLink from '../StyledLink';
 
 // import styled from 'styled-components';
 
@@ -26,7 +28,6 @@ const styles = theme => ({
   rightItem: {
     textAlign: 'right',
   },
-
 });
 
 /* eslint-disable react/prefer-stateless-function */
@@ -41,18 +42,22 @@ class TemplateItem extends React.Component {
   render() {
     const { classes } = this.props;
 
+    var linkRoute = "/template/"+this.state.lang+"/"+this.state.name;
+
     return (
-      <Paper className={classes.root}
-             elevation={2}>
-        <Grid container>
-          <Grid item className={classes.leftItem} xs={10}>
-            {this.state.name}
+      <StyledLink to={linkRoute}>
+        <Paper className={classes.root}
+              elevation={2}>
+          <Grid container>
+            <Grid item className={classes.leftItem} xs={10}>
+              <Typography className={classes.text}>{this.state.name}</Typography>
+            </Grid>
+            <Grid item className={classes.rightItem} xs={2}>
+              <Typography className={classes.text}>{this.state.lang}</Typography>
+            </Grid>
           </Grid>
-          <Grid item className={classes.rightItem} xs={2}>
-            {this.state.lang}
-          </Grid>
-        </Grid>
-      </Paper>
+        </Paper>
+      </StyledLink>
     );
   }
 }

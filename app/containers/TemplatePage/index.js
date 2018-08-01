@@ -18,6 +18,19 @@ import reducer from './reducer';
 import saga from './saga';
 import messages from './messages';
 import { loadTemplate } from './actions';
+import { Grid, Paper, withStyles } from '@material-ui/core';
+import { AnnotationItem } from '../AnnotationItem';
+
+
+const styles = theme => ({
+  panel: {
+    padding: theme.spacing.unit,
+  },
+  container: {
+    width: '90%',
+    margin: 'auto',
+  },
+});
 
 /* eslint-disable react/prefer-stateless-function */
 export class TemplatePage extends React.Component {
@@ -36,11 +49,33 @@ export class TemplatePage extends React.Component {
   }
 
   render() {
+    const { classes } = this.props;
+
+    var annotationsList = undefined;
+    if(this.props.templatepage.template != undefined) {
+      annotationsList = (
+        this.props.templatepage.template.annotations.map(ann => (
+          <AnnotationItem annotation={ann} key={ann.id}/>
+        ))
+      )
+    }
+
     return (
       <div>
-        <FormattedMessage {...messages.header} />
-        <p>{JSON.stringify(this.state)}</p>
-        <p>{JSON.stringify(this.props.templatepage)}</p>
+        <Grid container spacing={16} className={classes.container}>
+          <Grid item xs={6} className={classes.panel}>
+            <Paper>
+              <p>{JSON.stringify(this.state)}</p>
+              {/* <p>{JSON.stringify(this.props.templatepage)}</p> */}
+            </Paper>
+          </Grid>
+          <Grid item xs={6} className={classes.panel}>
+            <Paper>
+              {annotationsList}
+              {/* <p>{JSON.stringify(this.props.templatepage)}</p> */}
+            </Paper>
+          </Grid>          
+        </Grid>
       </div>
     );
   }
@@ -72,4 +107,5 @@ export default compose(
   withReducer,
   withSaga,
   withConnect,
+  withStyles(styles),
 )(TemplatePage);
