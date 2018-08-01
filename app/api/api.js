@@ -6,6 +6,7 @@ class ApiCalls {
             "Content-Type": "application/json; charset=utf-8",
             "Accept": "application/json",
         }
+        
         // ES6 needs manual binding :(
         this.userLogin = this.userLogin.bind(this);
         this.userLogout = this.userLogout.bind(this);

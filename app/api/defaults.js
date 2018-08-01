@@ -1,7 +1,9 @@
+import BrowserStorage from "./browserStorage";
 
 
-export const _API_ROUTE = 'http://localhost:8080/predictor/webapi';
+
+const brwst = new BrowserStorage();
 
 export function API_ROUTE() {
-    return _API_ROUTE;
+    return brwst.getApiBaseURL();
 }
