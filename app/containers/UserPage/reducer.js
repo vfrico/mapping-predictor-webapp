@@ -10,9 +10,7 @@ import { DEFAULT_ACTION, LOGOUT_ACTION, LOGOUT_SUCCESS } from './constants';
 export const initialState = fromJS({});
 
 function userPageReducer(state = initialState, action) {
-  
-  console.log("ReducerUserPage: "+JSON.stringify(state));
-  switch (action.type) {
+    switch (action.type) {
     case DEFAULT_ACTION:
       return state;
     case LOGOUT_ACTION:

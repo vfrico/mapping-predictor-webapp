@@ -21,13 +21,13 @@ var objectIsEmpty = obj => {
   try {
       return Object.keys(obj).length === 0 && obj.constructor === Object
   } catch (err) {
-      console.log("Error: "+err);
+      console.error("Error: "+err);
   }
   return false;
 }
 
 function* apiCaller(action) {
-  console.log("Api caller for send login");
+  // console.log("Api caller for send login");
   var api = new ApiCalls(API_ROUTE());
   try {
     const response = yield call(api.userLogin, action.username, action.password);
@@ -44,22 +44,19 @@ function* apiCaller(action) {
         yield put(successfulLogin(user.username, user.email, user.jwt));
       }
     } else {
-      console.log("Error found on API:")
       const err = yield call([response, response.json])
-      console.log("The error is: "+JSON.stringify(err))
+      console.error("The error is: "+JSON.stringify(err))
       yield put(errorLogin(action.user, err));
     }
     
   } catch (e) {
-    console.log("error is ="+e);
-    console.error(e)
-    console.log("Message: "+e.message)
+    console.error("Message: "+e.message)
     yield put(errorLogin(action.username, {msg: e.message}));
   }
 }
 
 function* apiSignUpCaller(action) {
-  console.log("Api caller for sign up");
+  // console.log("Api caller for sign up");
   var api = new ApiCalls(API_ROUTE());
   try {
     const response = yield call(api.userSignUp, action.username, action.password, action.email);
@@ -72,24 +69,19 @@ function* apiSignUpCaller(action) {
       //yield put(signUpSuccess(user.username, user.password))
       yield put(sendLogin(user.username, user.password_md5));
     } else {
-      console.log("Error found on API:")
       const err = yield call([response, response.json])
-      console.log("The error is: "+JSON.stringify(err))
+      console.error("The error is: "+JSON.stringify(err))
       yield put(signUpError(action.username, err));
     }
     
   } catch (e) {
-    console.log("error is ="+e);
-    console.error(e)
-    console.log("Message: "+e.message)
+    console.log("Error message: "+e.message)
     yield put(signUpError(action.username, {msg: e.message}));
   }
 
 }
 
 function* delayDeletion(action) {
-  console.log("Delete error msg");
-  // yield call();  // To really call to api // TODO
   yield delay(10 * 1000);
   yield put(deleteErrorLogin());
 }

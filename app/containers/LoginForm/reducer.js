@@ -11,7 +11,7 @@ import { LOGOUT_ACTION, LOGOUT_SUCCESS, LOGOUT_ERROR, LOGOUT_ERROR_DELETE } from
 export const initialState = fromJS({});
 
 function loginFormReducer(state = initialState, action) {
-  console.log("LoginFormReducer with action: "+JSON.stringify(action));
+  
   switch (action.type) {
     case DEFAULT_ACTION:
       return state;
@@ -24,7 +24,7 @@ function loginFormReducer(state = initialState, action) {
       // to allow the user see it actually is registered on the system
       return state;
     case SUCCESSFUL_LOGIN:
-      console.log("SUCCEsful login: "+JSON.stringify(action));
+      
       var newState = state.set("user", {
         username: action.username,
         jwt: action.jwt,

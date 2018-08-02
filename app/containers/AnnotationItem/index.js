@@ -66,23 +66,23 @@ export class AnnotationItem extends React.Component {
 
     return (
       <Grid container>
-        <Grid item xs={4}>
+        <Grid item xs={6}>
           <b>{this.state.langA}</b>
           <p>{this.state.templateA}</p>
           <p>{this.state.attributeA}</p>
           <p>{this.state.propA}</p>
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={6}>
           <b>{this.state.langB}</b>
           <p>{this.state.templateB}</p>
           <p>{this.state.attributeB}</p>
           <p>{this.state.propB}</p>
         </Grid>
-        <Grid item xs={4}>
-        <Button onClick={sendVoteValid()}>
+        <Grid item xs={12}>
+        <Button onClick={this.sendVoteValid}>
           Valid mapping
         </Button>
-        <Button onClick={sendVoteIncorrect()}>
+        <Button onClick={this.sendVoteIncorrect}>
           Incorrect mapping
         </Button>
         </Grid>

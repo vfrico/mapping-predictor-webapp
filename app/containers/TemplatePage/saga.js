@@ -13,13 +13,12 @@ var objectIsEmpty = obj => {
   try {
       return Object.keys(obj).length === 0 && obj.constructor === Object
   } catch (err) {
-      console.log("Error: "+err);
+      console.error("Error: "+err);
   }
   return false;
 }
 
 function* getTemplateFromApi(action) {
-  console.log("Api caller for get template page");
   var api = new ApiCalls(API_ROUTE());
   try {
     const response = yield call(api.getTemplateInfo, action.templateName, action.lang);
@@ -33,16 +32,13 @@ function* getTemplateFromApi(action) {
         yield put(templateLoaded(templateInfo));
       }
     } else {
-      console.log("Error found on API template page")
       const err = yield call([response, response.json])
-      console.log("The error is: "+JSON.stringify(err))
+      console.error("The error is: "+JSON.stringify(err))
       yield put(templateLoadError(action.templateName, err));
     }
     
   } catch (e) {
-    console.log("error is on saga for template page ="+e);
-    console.error(e)
-    console.log("Message: "+e.message)
+    console.error("error is on saga for template page ="+e);
     yield put(templateLoadError(action.templateName, {msg: e.message}));
   }
 }

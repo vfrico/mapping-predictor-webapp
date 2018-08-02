@@ -10,7 +10,6 @@ import { DEFAULT_ACTION, LOAD_TEMPLATES, LOADED_TEMPLATES, LOADED_TEMPLATES_ERRO
 export const initialState = fromJS({});
 
 function templateViewReducer(state = initialState, action) {
-  console.log("TemplateViewReducer with action: "+JSON.stringify(action));
   switch (action.type) {
     case DEFAULT_ACTION:
       var newState = state.set("new", "defaultActionOnReducer");
@@ -21,12 +20,10 @@ function templateViewReducer(state = initialState, action) {
       return newState;
 
     case LOADED_TEMPLATES:
-      console.log("Action: "+JSON.stringify(action));
       var newState = state.set("templates", action.templates);
       return newState;
 
     case LOADED_TEMPLATES_ERROR:
-      console.log("Templates loaded with error: "+JSON.stringify(action));
       var newState = state.set("error", action.error);
       return newState;
 

@@ -9,10 +9,9 @@ import { successfulLogin } from '../LoginForm/actions';
 // import { take, call, put, select } from 'redux-saga/effects';
 
 function* apiCaller(action) {
-  console.log("Get info from browser");
+  // console.log("Get info from browser");
   const bwst = new BrowserStorage();
   var obj = yield call(()=>bwst.getUser());  // To really call 
-  console.log("User from local storage: "+JSON.stringify(obj));
   if (!bwst.objectIsEmpty(obj)) {
     // Only update if user object is empty
     yield put(successfulBrowserUserInfo(obj.username,obj.email, obj.jwt));

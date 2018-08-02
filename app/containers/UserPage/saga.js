@@ -9,7 +9,7 @@ import { API_ROUTE } from '../../api/defaults';
 
 function* apiCaller(action) {
 
-  console.log("Api caller for logout. Action="+JSON.stringify(action))
+  // console.log("Api caller for logout. Action="+JSON.stringify(action))
   var api = new ApiCalls(API_ROUTE());
   // yield call();  // To really call 
   try {
@@ -25,25 +25,20 @@ function* apiCaller(action) {
       yield put(deleteErrorUserPage());
       
     } else {
-      console.log("Error found on API:")
       const err = yield call([response, response.json])
-      console.log("The error is: "+JSON.stringify(err))
+      console.error("The error is: "+JSON.stringify(err))
       yield put(logoutError(action.username, err));
     }
     
   } catch (e) {
-    console.log("error on logout: "+e);
-    console.error(e)
     var errorString = e.message;
-    console.log("ErrorString: "+errorString)
-    yield put(logoutError(action.username, e.message));
+    console.error("ErrorString: "+errorString)
+    yield put(logoutError(action.username, errorString));
   }
 }
 
 
 function* delayErrorDeletion(action) {
-  console.log("Delete error msg on userPage");
-  // yield call();  // To really call to api // TODO
   yield delay(10 * 1000);
   yield put(deleteErrorUserPage());
 }

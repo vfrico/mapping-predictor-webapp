@@ -10,18 +10,17 @@ var objectIsEmpty = obj => {
   try {
       return Object.keys(obj).length === 0 && obj.constructor === Object
   } catch (err) {
-      console.log("Error: "+err);
+      console.error("Error: "+err);
   }
   return false;
 }
 
 function* defaultAct(action) {
-  console.log("Is this the default action??");
+  
 }
 
 function* apiCaller(action) {
-
-  console.log("Api caller for load templates");
+  // console.log("Api caller for load templates");
   var api = new ApiCalls(API_ROUTE());
   try {
     const response = yield call(api.getTemplatesByLanguage, action.language);
@@ -35,16 +34,13 @@ function* apiCaller(action) {
         yield put(loadedTemplates(templatesList));
       }
     } else {
-      console.log("Error found on API")
       const err = yield call([response, response.json])
-      console.log("The error is: "+JSON.stringify(err))
+      console.error("The error is: "+JSON.stringify(err))
       yield put(loadedTemplatesError(err));
     }
     
   } catch (e) {
-    console.log("error is ="+e);
-    console.error(e)
-    console.log("Message: "+e.message)
+    console.error("Message: "+e.message)
     yield put(loadedTemplatesError({msg: e.message}));
   }
   // console.log("I am an api call");

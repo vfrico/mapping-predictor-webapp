@@ -2,10 +2,7 @@ export const _API_ROUTE = 'http://localhost:8080/predictor/webapi';
 
 class BrowserStorage {
     constructor() {
-        console.log("browserStorage class")
         this.storage = localStorage;
-        console.log("storage is: "+JSON.stringify(this.storage));
-        console.log(this)
 
         // ES6 needs manual binding :(
         this.saveUser = this.saveUser.bind(this);
@@ -36,13 +33,11 @@ class BrowserStorage {
     }
 
     getUser() {
-        console.log('before');
-        console.log(this);
         var user = undefined;
         try {
             user = JSON.parse(this.storage.getItem('user'));
         } catch (err) {
-            console.log("catched: "+err)
+            console.error("catched: "+err)
         }
         
         if (user == undefined || this.objectIsEmpty(user)) {
@@ -61,14 +56,11 @@ class BrowserStorage {
         try{
             baseUri = this.storage.getItem('baseURI');            
         } catch (err) {
-            console.log("Catched error: "+err);
             return _API_ROUTE;
         }
         if (baseUri == undefined || this.objectIsEmpty(baseUri)) {
-            console.log("default base uri"+_API_ROUTE)
             return _API_ROUTE;
         } else {
-            console.log("stored base uri: "+baseUri)
             return baseUri;
         }
     }

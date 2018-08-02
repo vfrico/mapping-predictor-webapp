@@ -53,7 +53,6 @@ const styles = {
 class ButtonAppBar extends React.Component {
 
   componentDidMount() {
-    console.log("ComponentDidMount");
     this.props.getUserInfoFromStorage();
   }
 /*
@@ -72,7 +71,7 @@ class ButtonAppBar extends React.Component {
 
     var loggedIn, rightComponent;
 
-    console.log("Info: "+JSON.stringify(userInfo)+", de tipo: "+typeof(userInfo))
+    //console.log("Info: "+JSON.stringify(userInfo)+", de tipo: "+typeof(userInfo))
     if (userInfo.user != undefined) {
       loggedIn = 'yes';
       rightComponent = <Link to="/user">
@@ -115,10 +114,7 @@ ButtonAppBar.propTypes = {
 
 const mergePropsObject = (obj1, obj2) => {
   try {
-    console.log("MERGE")
-    console.log(obj1.toJS(), obj2.toJS())
     var merged = { ... obj1.toJS(), ... obj2.toJS()}
-    console.log(merged)
     return fromJS(merged)
   } catch (e) {
     return fromJS({})
@@ -134,7 +130,6 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
       getUserInfoFromStorage: () => {
-        console.log("Before dispatch getUserInfo");
         dispatch(getUserInfo());
     },
   };

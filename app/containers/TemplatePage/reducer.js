@@ -10,7 +10,7 @@ import { DEFAULT_ACTION, TEMPLATE_LOADED, LOAD_TEMPLATE, TEMPLATE_LOAD_ERROR } f
 export const initialState = fromJS({});
 
 function templatePageReducer(state = initialState, action) {
-  console.log("Reducer for TemplatePage with action: "+JSON.stringify(action))
+  
   switch (action.type) {
     case DEFAULT_ACTION:
     case LOAD_TEMPLATE:
