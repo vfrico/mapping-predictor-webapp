@@ -19,7 +19,7 @@ import saga from './saga';
 import messages from './messages';
 import { loadTemplate } from './actions';
 import { Grid, Paper, withStyles } from '@material-ui/core';
-import { AnnotationItem } from '../AnnotationItem';
+import AnnotationItem from '../AnnotationItem';
 
 
 const styles = theme => ({

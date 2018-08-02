@@ -17,15 +17,36 @@ import makeSelectAnnotationItem from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 import messages from './messages';
-import { Grid, Button } from '@material-ui/core';
+import { Grid, Button, Paper, withStyles } from '@material-ui/core';
 import { sendVote } from './actions';
 import { VOTE_CORRECT, VOTE_WRONG } from '../../api/defaults';
+import BrowserStorage from '../../api/browserStorage';
+
+
+const styles = theme => ({
+  panel: {
+    padding: theme.spacing.unit,
+  },
+  container: {
+    padding: '0.5em 1em',
+  },
+  buttonContainer: {
+    justifyContent: 'space-around',
+  },
+  innerButtonContainer: {
+    flexGrow:1,
+    textAlign: 'center'
+  },
+  error: {
+    color: 'red',
+  },
+});
 
 /* eslint-disable react/prefer-stateless-function */
 export class AnnotationItem extends React.Component {
 
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       attributeA: props.annotation.attributeA,
       attributeB:props.annotation.attributeB,
@@ -42,18 +63,26 @@ export class AnnotationItem extends React.Component {
     }
   }
 
-  sendVoteIncorrect() {
-    console.log("Wrong mapping")
-    this.props.dispatch(sendVote(VOTE_CORRECT, this.state.id, user, jwt))
+  getUserFromStorage = () => {
+    const brwst = new BrowserStorage();
+    return brwst.getUser();
   }
 
-  sendVoteValid() {
+  sendVoteIncorrect = () => {
+    console.log("Wrong mapping")
+    console.log("User: ")
+    const user = this.getUserFromStorage();
+    const { username, jwt } = user;
+    console.log(user)
+    this.props.dispatch(sendVote(VOTE_CORRECT, this.state.id, username, jwt))
+  }
+
+  sendVoteValid = () => {
     console.log("Valid mapping")
-    this.props.dispatch(sendVote(VOTE_WRONG, this.state.id, user, jwt))
+    this.props.dispatch(sendVote(VOTE_WRONG, this.state.id, username, jwt))
   }
 
   render() {
-
     // TODO: Show advanced information about previous votation
     // Maybe a new component?
     var res = undefined;
@@ -64,29 +93,84 @@ export class AnnotationItem extends React.Component {
       catch(e) { }
     }
 
+    var errorMsg = undefined;
+    if (this.props.annotationitem[this.state.id] != undefined && 
+        this.props.annotationitem[this.state.id].error != undefined) {
+      errorMsg = this.props.annotationitem[this.state.id].error.msg;
+    }
+
+    const { classes } = this.props;
+    
     return (
-      <Grid container>
-        <Grid item xs={6}>
-          <b>{this.state.langA}</b>
-          <p>{this.state.templateA}</p>
-          <p>{this.state.attributeA}</p>
-          <p>{this.state.propA}</p>
-        </Grid>
-        <Grid item xs={6}>
-          <b>{this.state.langB}</b>
-          <p>{this.state.templateB}</p>
-          <p>{this.state.attributeB}</p>
-          <p>{this.state.propB}</p>
+      <Grid container spacing={8} className={classes.container}>
+      <Grid item xs={12}><Paper>
+        {/* <Grid item xs={12}>
+          
+            <Grid container>
+              <Grid item xs={6}>
+                <b>{this.state.langA}</b>
+              </Grid>
+              <Grid item xs={6}>
+                <b>{this.state.langB}</b>
+              </Grid>
+            </Grid>
+          
+        </Grid> */}
+        <Grid item xs={12}>
+          {/* <Paper> */}
+            <Grid container>
+              <Grid item xs={6}>
+                <b>{this.state.templateA}</b>
+              </Grid>
+              <Grid item xs={6}>
+                <b>{this.state.templateB}</b>
+              </Grid>
+            </Grid>
+          {/* </Paper> */}
         </Grid>
         <Grid item xs={12}>
-        <Button onClick={this.sendVoteValid}>
-          Valid mapping
-        </Button>
-        <Button onClick={this.sendVoteIncorrect}>
-          Incorrect mapping
-        </Button>
+          {/* <Paper> */}
+            <Grid container>
+              <Grid item xs={6}>
+                <b>{this.state.attributeA}</b>
+              </Grid>
+              <Grid item xs={6}>
+                <b>{this.state.attributeB}</b>
+              </Grid>
+            </Grid>
+          {/* </Paper> */}
         </Grid>
-        {res}
+        <Grid item xs={12}>
+          {/* <Paper> */}
+            <Grid container>
+              <Grid item xs={6}>
+                <b>{this.state.propA}</b>
+              </Grid>
+              <Grid item xs={6}>
+                <b>{this.state.propB}</b>
+              </Grid>
+            </Grid>
+          {/* </Paper> */}
+        </Grid>
+        </Paper></Grid>
+        <Grid item xs={12}>
+        {/* <Grid container style={{alignItems: 'center'}}> */}
+        <Grid container className={classes.buttonContainer}>
+          {/* <Grid item className={classes.innerButtonContainer}> */}
+            <Button onClick={this.sendVoteValid}>
+              Correct mapping
+            </Button>
+          {/* </Grid>
+          <Grid item className={classes.innerButtonContainer}> */}
+            <Button onClick={this.sendVoteIncorrect}>
+              Wrong mapping
+            </Button>
+          {/* </Grid> */}
+          </Grid>
+        </Grid>
+        <div className={classes.error}>
+          {errorMsg}
+        </div>
       </Grid>
     );
   }
@@ -113,10 +197,11 @@ const withConnect = connect(
 );
 
 const withReducer = injectReducer({ key: 'annotationItem', reducer });
-const withSaga = injectSaga({ key: 'annotationItem', saga });
+// const withSaga = injectSaga({ key: 'annotationItem', saga });
 
 export default compose(
   withReducer,
-  withSaga,
+//  withSaga,
   withConnect,
+  withStyles(styles),
 )(AnnotationItem);

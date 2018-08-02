@@ -6,6 +6,8 @@ import { templateLoaded, templateLoadError } from "./actions";
 import BrowserStorage from '../../api/browserStorage';
 import ApiCalls from '../../api/api';
 import { API_ROUTE } from '../../api/defaults';
+import { SEND_VOTE } from '../AnnotationItem/constants';
+import { voteAccepted, voteRejected } from '../AnnotationItem/actions';
 
 
 
@@ -48,10 +50,40 @@ function* getTemplateSaga() {
   yield takeEvery(LOAD_TEMPLATE, getTemplateFromApi);
 }
 
+
+function* apiCallSendVote(action) {
+  console.log("Api caller for send vote. Action = "+JSON.stringify(action));
+  var api = new ApiCalls(API_ROUTE());
+  try {
+    const response = yield call(api.sendUserVote, action.annotationId, action.voteType, action.username, action.jwt);
+    
+    if (response.status === 201) {
+      const annotation = yield call([response, response.json]);
+      if (annotation != undefined && !objectIsEmpty(annotation)) {
+        // Update state of successful login
+        yield put(voteAccepted(action.annotationId, annotation));
+      }
+    } else {
+      const err = yield call([response, response.json])
+      console.error("The error is: "+JSON.stringify(err))
+      yield put(voteRejected(action.annotationId, err));
+    }
+  } catch (e) {
+    console.error("Message: "+e.message)
+    yield put(voteRejected(action.annotationId, {msg: e.message}));
+  }
+}
+
+function* sendVoteSaga() {
+  console.log("saga 1 on parent")
+  yield takeLatest(SEND_VOTE, apiCallSendVote);
+}
+
 // Individual exports for testing
 export default function* defaultSaga() {
   // See example in containers/HomePage/saga.js
   yield all([
     getTemplateSaga(),
+    sendVoteSaga(),
   ])
 }

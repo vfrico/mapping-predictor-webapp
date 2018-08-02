@@ -72,7 +72,7 @@ export class TemplateView extends React.Component {
     if (this.props.templateview.templates != undefined) {
       
       templatesList = this.props.templateview.templates.map(t => {
-        return <TemplateItem template={t}/>
+        return <TemplateItem template={t} key={t.template}/>
       })
     }
 

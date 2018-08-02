@@ -10,6 +10,7 @@ import { DEFAULT_ACTION, SEND_VOTE, VOTE_ACCEPTED, VOTE_REJECTED } from './const
 export const initialState = fromJS({});
 
 function annotationItemReducer(state = initialState, action) {
+  console.log("AnnotationItem reducer with action="+JSON.stringify(action))
   switch (action.type) {
     case DEFAULT_ACTION:
       return state;
@@ -19,11 +20,12 @@ function annotationItemReducer(state = initialState, action) {
 
     case VOTE_ACCEPTED:
       // Update the state of the annotation
-      var newState = state.put("annotation", action.payload);
+      var newState = state.set(action.annotationId, {annotation: action.payload});
       return newState
 
     case VOTE_REJECTED:
-      var newState = state.put("error", action.payload);
+      // Message error is saved on a separate property
+      var newState = state.set(action.annotationId, {error: action.payload});
       return newState;
       
     default:

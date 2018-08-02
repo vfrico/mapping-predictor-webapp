@@ -62,6 +62,6 @@ function* sagaApiCall() {
 export default function* rootSaga() {
   yield all([
     defaultSaga(),
-    sagaApiCall()
+    sagaApiCall(),
   ]);
 }
