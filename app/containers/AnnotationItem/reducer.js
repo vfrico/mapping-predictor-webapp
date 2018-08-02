@@ -5,7 +5,7 @@
  */
 
 import { fromJS } from 'immutable';
-import { DEFAULT_ACTION, SEND_VOTE, VOTE_ACCEPTED, VOTE_REJECTED } from './constants';
+import { DEFAULT_ACTION, SEND_VOTE, VOTE_ACCEPTED, VOTE_REJECTED, DELETE_VOTE_ERROR } from './constants';
 
 export const initialState = fromJS({});
 
@@ -26,6 +26,12 @@ function annotationItemReducer(state = initialState, action) {
     case VOTE_REJECTED:
       // Message error is saved on a separate property
       var newState = state.set(action.annotationId, {error: action.payload});
+      return newState;
+    
+    case DELETE_VOTE_ERROR:
+      var prevState = state.get(action.annotationId)
+      var st = prevState.error = undefined;
+      var newState = state.set(action.annotationId, st);
       return newState;
       
     default:

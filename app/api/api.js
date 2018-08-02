@@ -76,7 +76,20 @@ class ApiCalls {
     }
 
     sendUserVote(annotationId, voteType, username, jwt) {
-        return fetch();
+        return fetch(this.baseUri + '/annotations/' + annotationId + '/vote', {
+            method: 'POST',
+            headers: {
+                ... this.defaultHeaders,
+                Authorization: jwt,
+            },
+            body: JSON.stringify({
+                "vote": voteType,
+                "annotationId": annotationId,
+                "user": {
+                    "username": username
+                }
+            }),
+        });
     }
 }
 

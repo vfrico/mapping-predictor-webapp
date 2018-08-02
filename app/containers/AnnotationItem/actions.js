@@ -39,7 +39,7 @@ export function voteRejected(annotationId, payload) {
   }
 }
 
-export function deleteError(annotationId) {
+export function deleteVoteError(annotationId) {
   return {
     type: DELETE_VOTE_ERROR,
     annotationId,

@@ -70,19 +70,38 @@ export class AnnotationItem extends React.Component {
 
   sendVoteIncorrect = () => {
     console.log("Wrong mapping")
-    console.log("User: ")
     const user = this.getUserFromStorage();
     const { username, jwt } = user;
-    console.log(user)
-    this.props.dispatch(sendVote(VOTE_CORRECT, this.state.id, username, jwt))
+    this.props.dispatch(sendVote(VOTE_WRONG, this.state.id, username, jwt))
   }
 
   sendVoteValid = () => {
     console.log("Valid mapping")
-    this.props.dispatch(sendVote(VOTE_WRONG, this.state.id, username, jwt))
+    const user = this.getUserFromStorage();
+    const { username, jwt } = user;
+    this.props.dispatch(sendVote(VOTE_CORRECT, this.state.id, username, jwt))
   }
 
   render() {
+    var templateA = this.state.templateA, templateB = this.state.templateB;
+    var attributeA = this.state.attributeA, attributeB = this.state.attributeB;
+    var propA = this.state.propA, propB = this.state.propB;
+
+    var votes = this.state.votes;
+
+    if (this.props.annotationitem[this.state.id] != undefined &&
+        this.props.annotationitem[this.state.id].annotation != undefined) {
+          const { annotation } = this.props.annotationitem[this.state.id];
+          templateA = annotation.templateA;
+          templateB = annotation.templateB;
+          attributeA = annotation.attributeA;
+          attributeB = annotation.attributeB;
+          propA = annotation.propA;
+          propB = annotation.propB;
+          votes = annotation.votes;
+    }
+
+
     // TODO: Show advanced information about previous votation
     // Maybe a new component?
     var res = undefined;
@@ -120,22 +139,10 @@ export class AnnotationItem extends React.Component {
           {/* <Paper> */}
             <Grid container>
               <Grid item xs={6}>
-                <b>{this.state.templateA}</b>
+                <b>{templateA}</b>
               </Grid>
               <Grid item xs={6}>
-                <b>{this.state.templateB}</b>
-              </Grid>
-            </Grid>
-          {/* </Paper> */}
-        </Grid>
-        <Grid item xs={12}>
-          {/* <Paper> */}
-            <Grid container>
-              <Grid item xs={6}>
-                <b>{this.state.attributeA}</b>
-              </Grid>
-              <Grid item xs={6}>
-                <b>{this.state.attributeB}</b>
+                <b>{templateB}</b>
               </Grid>
             </Grid>
           {/* </Paper> */}
@@ -144,10 +151,22 @@ export class AnnotationItem extends React.Component {
           {/* <Paper> */}
             <Grid container>
               <Grid item xs={6}>
-                <b>{this.state.propA}</b>
+                <b>{attributeA}</b>
               </Grid>
               <Grid item xs={6}>
-                <b>{this.state.propB}</b>
+                <b>{attributeB}</b>
+              </Grid>
+            </Grid>
+          {/* </Paper> */}
+        </Grid>
+        <Grid item xs={12}>
+          {/* <Paper> */}
+            <Grid container>
+              <Grid item xs={6}>
+                <b>{propA}</b>
+              </Grid>
+              <Grid item xs={6}>
+                <b>{propB}</b>
               </Grid>
             </Grid>
           {/* </Paper> */}
@@ -170,6 +189,9 @@ export class AnnotationItem extends React.Component {
         </Grid>
         <div className={classes.error}>
           {errorMsg}
+        </div>
+        <div>
+          {JSON.stringify(votes)}
         </div>
       </Grid>
     );

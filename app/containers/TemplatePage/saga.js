@@ -6,8 +6,8 @@ import { templateLoaded, templateLoadError } from "./actions";
 import BrowserStorage from '../../api/browserStorage';
 import ApiCalls from '../../api/api';
 import { API_ROUTE } from '../../api/defaults';
-import { SEND_VOTE } from '../AnnotationItem/constants';
-import { voteAccepted, voteRejected } from '../AnnotationItem/actions';
+import { SEND_VOTE, DELETE_VOTE_ERROR, VOTE_REJECTED } from '../AnnotationItem/constants';
+import { voteAccepted, voteRejected, deleteError, deleteVoteError } from '../AnnotationItem/actions';
 
 
 
@@ -74,9 +74,18 @@ function* apiCallSendVote(action) {
   }
 }
 
+function* delayDeleteError(action) {
+  yield delay(5 * 1000);
+  yield put(deleteVoteError(action.annotationId));
+}
+
 function* sendVoteSaga() {
   console.log("saga 1 on parent")
   yield takeLatest(SEND_VOTE, apiCallSendVote);
+}
+
+function* deleteErrorSaga() {
+  yield takeEvery(VOTE_REJECTED, delayDeleteError);
 }
 
 // Individual exports for testing
@@ -85,5 +94,6 @@ export default function* defaultSaga() {
   yield all([
     getTemplateSaga(),
     sendVoteSaga(),
+    deleteErrorSaga(),
   ])
 }
