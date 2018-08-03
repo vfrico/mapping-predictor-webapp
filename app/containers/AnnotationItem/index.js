@@ -21,6 +21,7 @@ import { Grid, Button, Paper, withStyles } from '@material-ui/core';
 import { sendVote } from './actions';
 import { VOTE_CORRECT, VOTE_WRONG } from '../../api/defaults';
 import BrowserStorage from '../../api/browserStorage';
+import VoteAnnotation from '../../components/VoteAnnotation';
 
 
 const styles = theme => ({
@@ -91,6 +92,8 @@ export class AnnotationItem extends React.Component {
 
     if (this.props.annotationitem[this.state.id] != undefined &&
         this.props.annotationitem[this.state.id].annotation != undefined) {
+          console.log("Annotation: ")
+          console.log(this.props.annotationitem);
           const { annotation } = this.props.annotationitem[this.state.id];
           templateA = annotation.templateA;
           templateB = annotation.templateB;
@@ -99,9 +102,15 @@ export class AnnotationItem extends React.Component {
           propA = annotation.propA;
           propB = annotation.propB;
           votes = annotation.votes;
+          console.log(votes);
+    } else {
+      console.log("NO Annotation: ")
+          console.log(this.props.annotationitem);
     }
 
-
+    console.log("Votos fuera")
+    console.log(votes);
+/*
     // TODO: Show advanced information about previous votation
     // Maybe a new component?
     var res = undefined;
@@ -111,7 +120,7 @@ export class AnnotationItem extends React.Component {
       }
       catch(e) { }
     }
-
+*/
     var errorMsg = undefined;
     if (this.props.annotationitem[this.state.id] != undefined && 
         this.props.annotationitem[this.state.id].error != undefined) {
@@ -187,12 +196,13 @@ export class AnnotationItem extends React.Component {
           {/* </Grid> */}
           </Grid>
         </Grid>
-        <div className={classes.error}>
+        <Grid item xs={12} className={classes.error}>
           {errorMsg}
-        </div>
-        <div>
-          {JSON.stringify(votes)}
-        </div>
+        </Grid>
+        <Grid item xs={12}>
+          <VoteAnnotation votes={votes}>
+          </VoteAnnotation>
+        </Grid>
       </Grid>
     );
   }
