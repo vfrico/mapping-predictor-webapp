@@ -21,8 +21,8 @@ class VoteAnnotation extends React.Component {
   }
 
   componentWillReceiveProps = (props) => {
-    console.log("Props updated!!")
-    console.log(props)
+    //console.log("Props updated!!")
+    //console.log(props)
     this.setState({
       votes: props.votes,
     })

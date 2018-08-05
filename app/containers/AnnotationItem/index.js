@@ -17,7 +17,7 @@ import makeSelectAnnotationItem from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 import messages from './messages';
-import { Grid, Button, Paper, withStyles } from '@material-ui/core';
+import { Grid, Button, Paper, withStyles, Typography } from '@material-ui/core';
 import { sendVote } from './actions';
 import { VOTE_CORRECT, VOTE_WRONG } from '../../api/defaults';
 import BrowserStorage from '../../api/browserStorage';
@@ -30,6 +30,9 @@ const styles = theme => ({
   },
   container: {
     padding: '0.5em 1em',
+  },
+  annotation: {
+    marginBottom: '2em',
   },
   buttonContainer: {
     justifyContent: 'space-around',
@@ -60,7 +63,8 @@ export class AnnotationItem extends React.Component {
       templateA: props.annotation.templateA,
       templateB: props.annotation.templateB,
       id: props.annotation.id,
-      votes: props.annotation.votes
+      votes: props.annotation.votes,
+      classifiedAs: props.annotation.classificationResult.classifiedAs,
     }
   }
 
@@ -87,13 +91,12 @@ export class AnnotationItem extends React.Component {
     var templateA = this.state.templateA, templateB = this.state.templateB;
     var attributeA = this.state.attributeA, attributeB = this.state.attributeB;
     var propA = this.state.propA, propB = this.state.propB;
+    var classifiedAs = this.state.classifiedAs;
 
     var votes = this.state.votes;
 
     if (this.props.annotationitem[this.state.id] != undefined &&
         this.props.annotationitem[this.state.id].annotation != undefined) {
-          console.log("Annotation: ")
-          console.log(this.props.annotationitem);
           const { annotation } = this.props.annotationitem[this.state.id];
           templateA = annotation.templateA;
           templateB = annotation.templateB;
@@ -102,14 +105,8 @@ export class AnnotationItem extends React.Component {
           propA = annotation.propA;
           propB = annotation.propB;
           votes = annotation.votes;
-          console.log(votes);
-    } else {
-      console.log("NO Annotation: ")
-          console.log(this.props.annotationitem);
-    }
+    } else {    }
 
-    console.log("Votos fuera")
-    console.log(votes);
 /*
     // TODO: Show advanced information about previous votation
     // Maybe a new component?
@@ -130,6 +127,7 @@ export class AnnotationItem extends React.Component {
     const { classes } = this.props;
     
     return (
+      <Paper className={classes.annotation}>
       <Grid container spacing={8} className={classes.container}>
       <Grid item xs={12}><Paper>
         {/* <Grid item xs={12}>
@@ -200,10 +198,19 @@ export class AnnotationItem extends React.Component {
           {errorMsg}
         </Grid>
         <Grid item xs={12}>
-          <VoteAnnotation votes={votes}>
-          </VoteAnnotation>
+          <Typography>
+            Other users voted:
+          </Typography>
+          <VoteAnnotation votes={votes}/>
+        </Grid>
+        <Grid item xs={12}>
+          <Typography>
+            Classified as
+          </Typography>
+          {classifiedAs}
         </Grid>
       </Grid>
+      </Paper>
     );
   }
 }

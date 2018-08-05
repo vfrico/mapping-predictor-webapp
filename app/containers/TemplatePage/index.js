@@ -18,18 +18,22 @@ import reducer from './reducer';
 import saga from './saga';
 import messages from './messages';
 import { loadTemplate } from './actions';
-import { Grid, Paper, withStyles } from '@material-ui/core';
+import { Grid, Paper, withStyles, Typography, Button } from '@material-ui/core';
 import AnnotationItem from '../AnnotationItem';
 
 
 const styles = theme => ({
   panel: {
     padding: theme.spacing.unit,
+    marginTop: 2*theme.spacing.unit,
   },
   container: {
     width: '90%',
     margin: 'auto',
   },
+  inner: {
+    padding: 1.5*theme.spacing.unit,
+  }
 });
 
 /* eslint-disable react/prefer-stateless-function */
@@ -48,6 +52,14 @@ export class TemplatePage extends React.Component {
     this.props.dispatch(loadTemplate(this.state.templateName, this.state.lang));
   }
 
+  getWikiLink = (template, lang) => {
+    return "http://"+lang+".wikipedia.org/wiki/Template:"+template;
+  }
+
+  getMappingPediaLink = (template, lang) => {
+    return "http://mappings.dbpedia.org/index.php/Mapping_"+lang+":"+template;
+  }
+
   render() {
     const { classes } = this.props;
 
@@ -59,21 +71,49 @@ export class TemplatePage extends React.Component {
         ))
       )
     }
-
+    const wikiLink = this.getWikiLink(this.state.templateName, this.state.lang);
+    const mappingPediaLink = this.getMappingPediaLink(this.state.templateName, this.state.lang);
     return (
       <div>
         <Grid container spacing={16} className={classes.container}>
           <Grid item xs={6} className={classes.panel}>
-            <Paper>
-              <p>{JSON.stringify(this.state)}</p>
-              {/* <p>{JSON.stringify(this.props.templatepage)}</p> */}
+            <Paper className={classes.inner}>
+              <Typography variant="display1">
+                {this.state.templateName}
+              </Typography>
+              <br/>
+              <Typography variant="subheading">
+                Template from <a href={wikiLink}>{this.state.lang}.wikipedia.org</a>
+              </Typography>
+              <Typography variant="subheading">
+                Mappings available on <a href={mappingPediaLink}>mappings.dbpedia.org</a>
+              </Typography>
+              <br/>
+              <div>
+                <Typography>
+                  <b>All annotations: </b> {this.props.templatepage.template.allAnnotations}
+                </Typography>
+                <Typography>
+                  <b>Correct: </b> {this.props.templatepage.template.correctAnnotations}
+                </Typography>
+                <Typography>
+                  <b>Wrong: </b> {this.props.templatepage.template.wrongAnnotations}
+                </Typography>
+              </div>
+              <br/>
+              <div>
+                <Typography variant="title">
+                  Edition locks
+                </Typography>
+                <p>This mapping is currently edited by: {"anyone"}</p>
+                <Button>
+                  Request lock
+                </Button>
+              </div>
             </Paper>
           </Grid>
           <Grid item xs={6} className={classes.panel}>
-            <Paper>
               {annotationsList}
-              {/* <p>{JSON.stringify(this.props.templatepage)}</p> */}
-            </Paper>
           </Grid>          
         </Grid>
       </div>
