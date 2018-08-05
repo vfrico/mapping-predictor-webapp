@@ -6,7 +6,7 @@ import { initialState } from './reducer';
  */
 
 const selectLoginFormDomain = (state) => {
-  console.log("all state: "+JSON.stringify(state));
+  //console.log("all state: "+JSON.stringify(state));
   return state.get('loginForm', initialState);
 }
 

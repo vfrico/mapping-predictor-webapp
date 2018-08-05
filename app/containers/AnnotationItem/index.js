@@ -51,7 +51,7 @@ export class AnnotationItem extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {
+    /*this.state = {
       attributeA: props.annotation.attributeA,
       attributeB:props.annotation.attributeB,
       // classA: props.annotation.classA,
@@ -65,7 +65,7 @@ export class AnnotationItem extends React.Component {
       id: props.annotation.id,
       votes: props.annotation.votes,
       classifiedAs: props.annotation.classificationResult.classifiedAs,
-    }
+    }*/
   }
 
   getUserFromStorage = () => {
@@ -77,27 +77,31 @@ export class AnnotationItem extends React.Component {
     console.log("Wrong mapping")
     const user = this.getUserFromStorage();
     const { username, jwt } = user;
-    this.props.dispatch(sendVote(VOTE_WRONG, this.state.id, username, jwt))
+    this.props.dispatch(sendVote(VOTE_WRONG, this.props.annotation.id, username, jwt))
   }
 
   sendVoteValid = () => {
     console.log("Valid mapping")
     const user = this.getUserFromStorage();
     const { username, jwt } = user;
-    this.props.dispatch(sendVote(VOTE_CORRECT, this.state.id, username, jwt))
+    this.props.dispatch(sendVote(VOTE_CORRECT, this.props.annotation.id, username, jwt))
   }
 
   render() {
-    var templateA = this.state.templateA, templateB = this.state.templateB;
-    var attributeA = this.state.attributeA, attributeB = this.state.attributeB;
-    var propA = this.state.propA, propB = this.state.propB;
-    var classifiedAs = this.state.classifiedAs;
+    var templateA = this.props.annotation.templateA;
+    var templateB = this.props.annotation.templateB;
+    var attributeA = this.props.annotation.attributeA;
+    var attributeB = this.props.annotation.attributeB;
+    var propA = this.props.annotation.propA;
+    var propB = this.props.annotation.propB;
+    var classifiedAs = this.props.annotation.classificationResult.classifiedAs;
 
-    var votes = this.state.votes;
+    var votes = this.props.annotation.votes;
 
-    if (this.props.annotationitem[this.state.id] != undefined &&
-        this.props.annotationitem[this.state.id].annotation != undefined) {
-          const { annotation } = this.props.annotationitem[this.state.id];
+    // update vars from properties received from saga
+    if (this.props.annotationitem[this.props.annotation.id] != undefined &&
+        this.props.annotationitem[this.props.annotation.id].annotation != undefined) {
+          const { annotation } = this.props.annotationitem[this.props.annotation.id];
           templateA = annotation.templateA;
           templateB = annotation.templateB;
           attributeA = annotation.attributeA;
@@ -105,7 +109,7 @@ export class AnnotationItem extends React.Component {
           propA = annotation.propA;
           propB = annotation.propB;
           votes = annotation.votes;
-    } else {    }
+    }
 
 /*
     // TODO: Show advanced information about previous votation
@@ -119,9 +123,9 @@ export class AnnotationItem extends React.Component {
     }
 */
     var errorMsg = undefined;
-    if (this.props.annotationitem[this.state.id] != undefined && 
-        this.props.annotationitem[this.state.id].error != undefined) {
-      errorMsg = this.props.annotationitem[this.state.id].error.msg;
+    if (this.props.annotationitem[this.props.annotation.id] != undefined && 
+        this.props.annotationitem[this.props.annotation.id].error != undefined) {
+      errorMsg = this.props.annotationitem[this.props.annotation.id].error.msg;
     }
 
     const { classes } = this.props;

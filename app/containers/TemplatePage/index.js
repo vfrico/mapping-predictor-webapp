@@ -64,12 +64,27 @@ export class TemplatePage extends React.Component {
     const { classes } = this.props;
 
     var annotationsList = undefined;
+    var statsDiv = undefined;
     if(this.props.templatepage.template != undefined) {
       annotationsList = (
         this.props.templatepage.template.annotations.map(ann => (
           <AnnotationItem annotation={ann} key={ann.id}/>
         ))
       )
+
+      statsDiv = (
+        <div>
+          <Typography>
+            <b>All annotations: </b> {this.props.templatepage.template.allAnnotations}
+          </Typography>
+          <Typography>
+            <b>Correct: </b> {this.props.templatepage.template.correctAnnotations}
+          </Typography>
+          <Typography>
+            <b>Wrong: </b> {this.props.templatepage.template.wrongAnnotations}
+          </Typography>
+        </div>
+      );
     }
     const wikiLink = this.getWikiLink(this.state.templateName, this.state.lang);
     const mappingPediaLink = this.getMappingPediaLink(this.state.templateName, this.state.lang);
@@ -89,17 +104,7 @@ export class TemplatePage extends React.Component {
                 Mappings available on <a href={mappingPediaLink}>mappings.dbpedia.org</a>
               </Typography>
               <br/>
-              <div>
-                <Typography>
-                  <b>All annotations: </b> {this.props.templatepage.template.allAnnotations}
-                </Typography>
-                <Typography>
-                  <b>Correct: </b> {this.props.templatepage.template.correctAnnotations}
-                </Typography>
-                <Typography>
-                  <b>Wrong: </b> {this.props.templatepage.template.wrongAnnotations}
-                </Typography>
-              </div>
+              {statsDiv}
               <br/>
               <div>
                 <Typography variant="title">

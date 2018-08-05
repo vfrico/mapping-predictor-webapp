@@ -71,7 +71,6 @@ const styles = theme => ({
 export class TemplateView extends React.Component {
   constructor(props) {
     super(props);
-    console.log(props);
     this.state = {
       lang: "es",
       descending: true, // Used in sorting function

@@ -55,7 +55,7 @@ const styles = theme => ({
 export class UserPage extends React.Component {
 
   getFromProps = property => {
-    console.log(this.props);
+    //console.log(this.props);
     try {
       if (this.props.loginInfo.user != undefined) {
         return this.props.loginInfo.user[property];
@@ -86,7 +86,7 @@ export class UserPage extends React.Component {
     if (this.props.loginInfo.error != undefined) {
       
       var errormsg = "";
-      console.log(this.props.loginInfo.error)
+      //console.log(this.props.loginInfo.error)
       if (this.props.loginInfo.error.error != undefined) {
         errormsg  = JSON.stringify(this.props.loginInfo.error.error)
       }

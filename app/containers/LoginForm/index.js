@@ -139,29 +139,29 @@ export class LoginForm extends React.Component {
         </div>;
       buttonText = "Log in";
     }
-    console.log("LoginForm")
-    console.log(this.props);
+    //console.log("LoginForm")
+    //console.log(this.props);
     if (this.props.loginform != undefined && !this.objectIsEmpty(this.props.loginform) &&
         this.props.loginform.user != undefined && !this.objectIsEmpty(this.props.loginform.user)) {
       // If user is not empty, change to user page
       this.props.history.push("/user");
-      console.log("change: "+this.props.loginform)
+      //console.log("change: "+this.props.loginform)
     } else {
-      console.log("No change: "+this.props.loginform)
+      //console.log("No change: "+this.props.loginform)
     }
 
     // Error handling
     var errorElement = undefined;
     if (this.props.loginform.error != undefined) {
-      console.log("ERROR HANDLING")
-      console.log(this.props.loginform.error)
+      //console.log("ERROR HANDLING")
+      //console.log(this.props.loginform.error)
       var errormsg = "";
-      console.log(this.props.loginform.error.error)
+      //console.log(this.props.loginform.error.error)
 
       if (this.props.loginform.error.error.msg != undefined) {
         errormsg  = this.props.loginform.error.error.msg;
-        console.log(errormsg)
-        console.log(this.props.loginform.error)
+        console.error(errormsg)
+        //console.log(this.props.loginform.error)
       }
 
       errorElement = <span className={classes.error}>

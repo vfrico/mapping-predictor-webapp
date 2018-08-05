@@ -23,6 +23,7 @@ import loginFormReducer from '../LoginForm/reducer';
 
 import injectSaga from 'utils/injectSaga';
 import saga from './saga';
+import StyledLink from '../../components/StyledLink';
 
 const whiteColor = {
   color: 'white'
@@ -74,18 +75,18 @@ class ButtonAppBar extends React.Component {
     //console.log("Info: "+JSON.stringify(userInfo)+", de tipo: "+typeof(userInfo))
     if (userInfo.user != undefined) {
       loggedIn = 'yes';
-      rightComponent = <Link to="/user">
+      rightComponent = <StyledLink to="/user">
         <IconButton>
           <AccountCircle />
         </IconButton>
-      </Link>;
+      </StyledLink>;
     } else {
       loggedIn = 'no';
-      rightComponent = <Link to="/login">
+      rightComponent = <StyledLink to="/login">
         <Button className={classes.button}>
           Login
         </Button>
-      </Link>;
+      </StyledLink>;
     }
 
     return (
