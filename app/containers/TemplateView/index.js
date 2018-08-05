@@ -23,15 +23,49 @@ import TemplateItem from '../../components/TemplateItem';
 
 import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
-import { Button, withStyles } from '@material-ui/core';
+import { Button, withStyles, Grid, Typography, Paper } from '@material-ui/core';
 
 
 const styles = theme => ({
   container: {
     width: '90%',
     margin: 'auto',
+  },
+  leftItem: {
+    textAlign: 'left',
+  },
+  rightItem: {
+    textAlign: 'right',
+  },
+  centerItem: {
+    textAlign: 'center',
+  },
+  root: {
+    ...theme.mixins.gutters(),
+    paddingTop: theme.spacing.unit * 2,
+    paddingBottom: theme.spacing.unit * 2,
+    paddingRight: 0,
+    margin: theme.spacing.unit,
+  },
+  topFilter: {
+    ...theme.mixins.gutters(),
+    paddingTop: theme.spacing.unit * 2,
+    paddingBottom: theme.spacing.unit * 2,
+    paddingRight: 0,
+    margin: theme.spacing.unit + "px auto",
+    justifyContent: 'center',
+  },
+  innerFilterElement: {
+    marginTop: 2*theme.spacing.unit,
+    marginBottom: theme.spacing.unit,
+    marginRight: 2*theme.spacing.unit,
+  },
+  filterDropdown: {
+    display: 'flex',
+    justifyContent: 'center',
   }
 });
+
 
 /* eslint-disable react/prefer-stateless-function */
 export class TemplateView extends React.Component {
@@ -40,11 +74,23 @@ export class TemplateView extends React.Component {
     console.log(props);
     this.state = {
       lang: "es",
+      descending: true, // Used in sorting function
+      sortKey: "wrongAnnotations", // Used in sorting function
+      sortFunction: this.numericSort,
     };
     // props.dispatch(defaultAction());
     // this.sleep(4000);
     // console.log("new props");
     // console.log(props);
+  }
+
+
+  numericSort = (a, b) => {
+    if (this.state.descending) {
+      return b[this.state.sortKey] - a[this.state.sortKey];
+    } else {
+      return a[this.state.sortKey] - b[this.state.sortKey];
+    }
   }
 
   handleChange = event => {
@@ -66,12 +112,38 @@ export class TemplateView extends React.Component {
     this.props.dispatch(loadTemplates(this.state.lang));
   }
 
+  changeToNumericSort = (key) => {
+    var desc = this.state.descending;
+    if (this.state.sortKey == key) {
+      desc = !desc;
+    }
+    this.setState({
+      descending: desc,
+      sortKey: key,
+      sortFunction: this.numericSort,
+    });
+  }
+
+  getSortingCaret = (key) => {
+    if(this.state.sortKey == key) {
+      if (this.state.descending) {
+        return "▼";
+      } else {
+        return "▲";
+      }
+    }
+  }
+
   render() {
 
-    var templatesList = undefined;
+    var templatesItems = undefined;
     if (this.props.templateview.templates != undefined) {
-      
-      templatesList = this.props.templateview.templates.map(t => {
+      var templatesList = this.props.templateview.templates;
+
+      // sort list
+      templatesList = templatesList.sort(this.state.sortFunction)
+
+      templatesItems = templatesList.map(t => {
         return <TemplateItem template={t} key={t.template}/>
       })
     }
@@ -80,26 +152,72 @@ export class TemplateView extends React.Component {
 
     return (
       <div className={classes.container}>
-        {/* <FormattedMessage {...messages.header} /> */}
-
-        <TextField
-          id="templates-lang"
-          select
-          label="Templates language"
-          value={this.state.lang}
-          onChange={this.handleChange}
-          margin="normal"
-        >
-          <MenuItem value="es">es</MenuItem>
-          <MenuItem value="en">en</MenuItem>
-        </TextField>
-        <Button onClick={this.callFunction}>Get templates</Button>
-
+        
+        <Grid container className={classes.topFilter}>
+          <Grid item xs={3}>
+            <Typography 
+              className={classes.innerFilterElement}
+              style={{textAlign:'right', marginTop: '21px'}}>
+              Filter templates by language: 
+            </Typography>
+          </Grid>
+          <Grid item xs={1} className={classes.filterDropdown}>
+            <TextField
+              id="templates-lang"
+              select
+              value={this.state.lang}
+              onChange={this.handleChange}
+              margin="normal">
+            >
+              <MenuItem value="es">Spanish</MenuItem>
+              <MenuItem value="en">English</MenuItem>
+            </TextField>
+          </Grid>
+          <Grid item xs={3}>
+            <Button onClick={this.callFunction}
+                    className={classes.innerFilterElement}
+                    style={{textAlign:'left'}}>
+                Get templates
+              </Button>
+          </Grid>
+        </Grid>
+        
         <div>
-          {templatesList}
+          <div className={classes.root}>
+          <Grid container>
+            <Grid item className={classes.leftItem} xs={8}>
+              <Typography className={classes.text}><b>Template name</b></Typography>
+            </Grid>
+            <Grid item className={classes.centerItem} xs={1}>
+              <Typography className={classes.text}><b>Language</b></Typography>
+            </Grid>
+            <Grid item className={classes.centerItem} xs={1}>
+              <Typography className={classes.text}
+                          onClick={() => this.changeToNumericSort('allAnnotations')}>
+                <b>All</b>
+                {this.getSortingCaret('allAnnotations')}
+              </Typography>
+            </Grid>
+            <Grid item className={classes.centerItem} xs={1}>
+              <Typography className={classes.text}
+                          onClick={() => this.changeToNumericSort('correctAnnotations')}>
+                <b>Correct</b>
+                {this.getSortingCaret('correctAnnotations')}
+              </Typography>
+            </Grid>
+            <Grid item className={classes.centerItem} xs={1}>
+              <Typography className={classes.text}
+                          onClick={() => this.changeToNumericSort('wrongAnnotations')}>
+                <b>Wrong</b>
+                {this.getSortingCaret('wrongAnnotations')}
+              </Typography>
+            </Grid>
+          </Grid>
+          </div>
+          {templatesItems}
         </div>
-        <p>{JSON.stringify(this.props.templateview)}</p>
-        <p>{JSON.stringify(this.state)}</p>
+        {/* <p>{JSON.stringify(this.props.templateview)}</p>
+        <p>{JSON.stringify(this.state)}</p> */}
       </div>
     );
   }

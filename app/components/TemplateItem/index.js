@@ -19,6 +19,7 @@ const styles = theme => ({
     ...theme.mixins.gutters(),
     paddingTop: theme.spacing.unit * 2,
     paddingBottom: theme.spacing.unit * 2,
+    paddingRight: 0,
     margin: theme.spacing.unit,
   },
   leftItem: {
@@ -27,32 +28,44 @@ const styles = theme => ({
   rightItem: {
     textAlign: 'right',
   },
+  centerItem: {
+    textAlign: 'center',
+  },  
 });
 
 /* eslint-disable react/prefer-stateless-function */
 class TemplateItem extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
+    /*this.state = {
       lang: props.template.lang,
       name: props.template.template,
-    }
+    }*/
   }
   render() {
     const { classes } = this.props;
 
-    var linkRoute = "/template/"+this.state.lang+"/"+this.state.name;
+    var linkRoute = "/template/"+this.props.template.lang+"/"+this.props.template.template;
 
     return (
       <StyledLink to={linkRoute}>
         <Paper className={classes.root}
               elevation={2}>
           <Grid container>
-            <Grid item className={classes.leftItem} xs={10}>
-              <Typography className={classes.text}>{this.state.name}</Typography>
+            <Grid item className={classes.leftItem} xs={8}>
+              <Typography className={classes.text}>{this.props.template.template}</Typography>
             </Grid>
-            <Grid item className={classes.rightItem} xs={2}>
-              <Typography className={classes.text}>{this.state.lang}</Typography>
+            <Grid item className={classes.centerItem} xs={1}>
+              <Typography className={classes.text}>{this.props.template.lang}</Typography>
+            </Grid>
+            <Grid item className={classes.centerItem} xs={1}>
+              <Typography className={classes.text}>{this.props.template.allAnnotations}</Typography>
+            </Grid>
+            <Grid item className={classes.centerItem} xs={1}>
+              <Typography className={classes.text}>{this.props.template.correctAnnotations}</Typography>
+            </Grid>
+            <Grid item className={classes.centerItem} xs={1}>
+              <Typography className={classes.text}>{this.props.template.wrongAnnotations}</Typography>
             </Grid>
           </Grid>
         </Paper>
