@@ -27,6 +27,12 @@ const styles = theme => ({
     padding: theme.spacing.unit,
     marginTop: 2*theme.spacing.unit,
   },
+  subpanel: {
+    paddingTop: '1em',
+  },
+  titleSpacing: {
+    marginBottom: '0.5em',
+  },
   container: {
     width: '90%',
     margin: 'auto',
@@ -68,7 +74,9 @@ export class TemplatePage extends React.Component {
     if(this.props.templatepage.template != undefined) {
       annotationsList = (
         this.props.templatepage.template.annotations.map(ann => (
-          <AnnotationItem annotation={ann} key={ann.id}/>
+          <Grid item xs={6} className={classes.panel}>
+            <AnnotationItem annotation={ann} key={ann.id}/>
+          </Grid>
         ))
       )
 
@@ -91,35 +99,47 @@ export class TemplatePage extends React.Component {
     return (
       <div>
         <Grid container spacing={16} className={classes.container}>
-          <Grid item xs={6} className={classes.panel}>
+          <Grid item xs={12} className={classes.panel}>
             <Paper className={classes.inner}>
-              <Typography variant="display1">
-                {this.state.templateName}
-              </Typography>
-              <br/>
-              <Typography variant="subheading">
-                Template from <a href={wikiLink}>{this.state.lang}.wikipedia.org</a>
-              </Typography>
-              <Typography variant="subheading">
-                Mappings available on <a href={mappingPediaLink}>mappings.dbpedia.org</a>
-              </Typography>
-              <br/>
-              {statsDiv}
-              <br/>
-              <div>
-                <Typography variant="title">
-                  Edition locks
+              <Grid container>
+              <Grid item xs={12}>
+                <Typography variant="display1">
+                  {this.state.templateName}
                 </Typography>
-                <p>This mapping is currently edited by: {"anyone"}</p>
-                <Button>
-                  Request lock
-                </Button>
-              </div>
+                <Typography variant="subheading">
+                  Template from <a href={wikiLink}>{this.state.lang}.wikipedia.org</a>
+                </Typography>
+                <Typography variant="subheading">
+                  Mappings available on <a href={mappingPediaLink}>mappings.dbpedia.org</a>
+                </Typography>
+              </Grid>
+              <Grid item xs={6}>
+                <div className={classes.subpanel}>
+                  <Typography variant="title" className={classes.titleSpacing}>
+                    Template stats
+                  </Typography>
+                  {statsDiv}
+                </div>
+              </Grid>
+              <Grid item xs={6}>
+                <div className={classes.subpanel}>
+                  <Typography variant="title" className={classes.titleSpacing}>
+                    Edition locks
+                  </Typography>
+                  <p>This mapping is currently edited by: <b>{"anyone"}</b></p>
+                </div>
+              </Grid>
+              </Grid>
             </Paper>
           </Grid>
-          <Grid item xs={6} className={classes.panel}>
+          <Grid item xs={12} className={classes.panel}>
+            <Typography variant="headline">
+              Available annotations:
+            </Typography>
+          </Grid>
+         {/* <Grid item xs={6} className={classes.panel}> */}
               {annotationsList}
-          </Grid>          
+          {/* </Grid>           */}
         </Grid>
       </div>
     );

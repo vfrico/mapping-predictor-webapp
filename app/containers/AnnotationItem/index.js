@@ -32,7 +32,7 @@ const styles = theme => ({
     padding: '0.5em 1em',
   },
   annotation: {
-    marginBottom: '2em',
+    margin: '0.5em',
   },
   buttonContainer: {
     justifyContent: 'space-around',
