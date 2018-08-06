@@ -67,7 +67,7 @@ class ApiCalls {
     }
 
     getTemplateInfo(templateName, language) {
-        return fetch(this.baseUri + '/templates/' + templateName + '?lang=' + language , {
+        return fetch(this.baseUri + '/templates/' + language + '/' + templateName, {
             method: 'GET',
             headers: {
                 ... this.defaultHeaders,
