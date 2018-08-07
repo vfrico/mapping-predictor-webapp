@@ -29,6 +29,7 @@ function loginFormReducer(state = initialState, action) {
         username: action.username,
         jwt: action.jwt,
         email: action.email,
+        role: action.role,
       });
       return newState;
 

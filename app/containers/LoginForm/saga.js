@@ -37,11 +37,11 @@ function* apiCaller(action) {
       if (user != undefined && !objectIsEmpty(user)) {
         // Update state on browser
         var brwst = new BrowserStorage();
-        brwst.saveUser(user.username, user.email, user.jwt);
+        brwst.saveUser(user.username, user.email, user.jwt, user.role);
   
         // Update state of successful login
         yield put(deleteErrorLogin())
-        yield put(successfulLogin(user.username, user.email, user.jwt));
+        yield put(successfulLogin(user.username, user.email, user.jwt, user.role));
       }
     } else {
       const err = yield call([response, response.json])
@@ -59,7 +59,7 @@ function* apiSignUpCaller(action) {
   // console.log("Api caller for sign up");
   var api = new ApiCalls(API_ROUTE());
   try {
-    const response = yield call(api.userSignUp, action.username, action.password, action.email);
+    const response = yield call(api.userSignUp, action.username, action.password, action.email, action.role);
     
     if (response.status === 201) {
       const user = yield call([response, response.json]);

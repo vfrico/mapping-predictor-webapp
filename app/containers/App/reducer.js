@@ -22,6 +22,7 @@ function appReducer(state = initialState, action) {
         username: action.username,
         email: action.email,
         jwt: action.jwt,
+        role: action.role,
       });
       return newState;
     

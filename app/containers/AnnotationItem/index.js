@@ -222,6 +222,7 @@ export class AnnotationItem extends React.Component {
 AnnotationItem.propTypes = {
   dispatch: PropTypes.func.isRequired,
   annotation: PropTypes.object.isRequired,
+  userRole: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({

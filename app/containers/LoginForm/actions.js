@@ -20,12 +20,13 @@ export function sendLogin(username, password) {
   }
 }
 
-export function successfulLogin(username, email, jwt) {
+export function successfulLogin(username, email, jwt, role) {
   return {
     type: SUCCESSFUL_LOGIN,
     username,
     email,
     jwt,
+    role,
   }
 }
 
@@ -43,12 +44,13 @@ export function deleteErrorLogin() {
   }
 }
 
-export function sendSignUp(username, password, email) {
+export function sendSignUp(username, password, email, role) {
   return {
     type: SEND_SIGN_UP,
     username,
     password,
     email,
+    role,
   }
 }
 

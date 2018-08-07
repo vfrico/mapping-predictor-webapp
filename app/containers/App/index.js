@@ -76,8 +76,8 @@ const mapDispatchToProps = (dispatch) => {
       getUserInfoFromStorage: () => {
           dispatch(getUserInfo());
       },
-      saveUserInformation: (user, email, jwt) => {
-        dispatch(saveBrowserUserInfo(user, email, jwt));
+      saveUserInformation: (user, email, jwt, role) => {
+        dispatch(saveBrowserUserInfo(user, email, jwt, role));
       }
   };
 };

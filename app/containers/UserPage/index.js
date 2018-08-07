@@ -109,6 +109,9 @@ export class UserPage extends React.Component {
               <div className={classes.textField}>
                 Email: {this.getFromProps('email')}
               </div>
+              <div className={classes.textField}>
+                Role: {this.getFromProps('role')}
+              </div>
             </div>
             {/* <span>{JSON.stringify(this.props.loginInfo)}</span> */}
             {errorElement}<br/>

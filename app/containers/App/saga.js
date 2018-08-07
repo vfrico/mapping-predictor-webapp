@@ -14,8 +14,8 @@ function* apiCaller(action) {
   var obj = yield call(()=>bwst.getUser());  // To really call 
   if (!bwst.objectIsEmpty(obj)) {
     // Only update if user object is empty
-    yield put(successfulBrowserUserInfo(obj.username,obj.email, obj.jwt));
-    yield put(successfulLogin(obj.username,obj.email,obj.jwt));
+    yield put(successfulBrowserUserInfo(obj.username,obj.email, obj.jwt, obj.role));
+    yield put(successfulLogin(obj.username, obj.email, obj.jwt, obj.role));
   }
 }
 

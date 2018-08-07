@@ -20,11 +20,12 @@ class BrowserStorage {
         return false;
     }
 
-    saveUser(username, email, jwt) {
+    saveUser(username, email, jwt, role) {
         this.storage.setItem('user', JSON.stringify({
             username,
             email,
             jwt,
+            role,
         }));
     }
 
@@ -47,6 +48,7 @@ class BrowserStorage {
                 username: user.username,
                 email: user.email,
                 jwt: user.jwt,
+                role: user.role,
             }
         }
     }

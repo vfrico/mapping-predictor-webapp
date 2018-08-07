@@ -20,6 +20,7 @@ import messages from './messages';
 import { loadTemplate } from './actions';
 import { Grid, Paper, withStyles, Typography, Button } from '@material-ui/core';
 import AnnotationItem from '../AnnotationItem';
+import BrowserStorage from '../../api/browserStorage';
 
 
 const styles = theme => ({
@@ -47,9 +48,12 @@ export class TemplatePage extends React.Component {
 
   constructor(props) {
     super(props);
+    const brwst = new BrowserStorage();
     this.state = {
       lang: this.props.match.params.lang,
       templateName: this.props.match.params.templateName,
+      // It is easier (and maybe faster too) to read from local Storage than from App state :(
+      user: brwst.getUser(),
     }
   }
 
@@ -75,7 +79,7 @@ export class TemplatePage extends React.Component {
       annotationsList = (
         this.props.templatepage.template.annotations.map(ann => (
           <Grid item xs={6} className={classes.panel}>
-            <AnnotationItem annotation={ann} key={ann.id}/>
+            <AnnotationItem annotation={ann} userRole={this.state.user.role} key={ann.id}/>
           </Grid>
         ))
       )

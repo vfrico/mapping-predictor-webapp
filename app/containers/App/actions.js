@@ -12,21 +12,23 @@ export function getUserInfo() {
   }
 }
 
-export function successfulBrowserUserInfo(username, email, jwt) {
+export function successfulBrowserUserInfo(username, email, jwt, role) {
   return {
     type: USER_INFO_FROM_BROWSER_SUCC,
     username,
     jwt,
     email,
+    role,
   }
 }
 
-export function saveBrowserUserInfo(username, email, jwt) {
+export function saveBrowserUserInfo(username, email, jwt, role) {
     return {
       type: SAVE_USER_INFO_ON_BROWSER,
       username,
       jwt,
       email,
+      role,
     }
   }
   
