@@ -44,6 +44,12 @@ const styles = theme => ({
   error: {
     color: 'red',
   },
+  correct: {
+    color: 'green',
+  },
+  hide: {
+    visibility: 'collapse',
+  },
 });
 
 /* eslint-disable react/prefer-stateless-function */
@@ -51,21 +57,6 @@ export class AnnotationItem extends React.Component {
 
   constructor(props) {
     super(props);
-    /*this.state = {
-      attributeA: props.annotation.attributeA,
-      attributeB:props.annotation.attributeB,
-      // classA: props.annotation.classA,
-      // classB: props.annotation.classB,
-      langA: props.annotation.langA,
-      langB: props.annotation.langB,
-      propA: props.annotation.propA,
-      propB: props.annotation.propB,
-      templateA: props.annotation.templateA,
-      templateB: props.annotation.templateB,
-      id: props.annotation.id,
-      votes: props.annotation.votes,
-      classifiedAs: props.annotation.classificationResult.classifiedAs,
-    }*/
   }
 
   getUserFromStorage = () => {
@@ -97,6 +88,21 @@ export class AnnotationItem extends React.Component {
     var classifiedAs = this.props.annotation.classificationResult.classifiedAs;
 
     var votes = this.props.annotation.votes;
+
+    /**
+     * 0 -> undefined = no loged in. Can see annotations
+     * 1 -> Mapper user: 0 + can lock mappings
+     * 2 -> Annotator user: 1 + can vote annotations
+     * 100 -> Admin user: same as 2
+     */
+    var role = 0;
+    if (this.props.userRole == "ADMIN") {
+      role = 100;
+    } else if (this.props.userRole == "MAPPER") {
+      role = 1;
+    } else if (this.props.userRole == "ANNOTATOR") {
+      role = 2;
+    }
 
     // update vars from properties received from saga
     if (this.props.annotationitem[this.props.annotation.id] != undefined &&
@@ -134,20 +140,7 @@ export class AnnotationItem extends React.Component {
       <Paper className={classes.annotation}>
       <Grid container spacing={8} className={classes.container}>
       <Grid item xs={12}><Paper>
-        {/* <Grid item xs={12}>
-          
-            <Grid container>
-              <Grid item xs={6}>
-                <b>{this.state.langA}</b>
-              </Grid>
-              <Grid item xs={6}>
-                <b>{this.state.langB}</b>
-              </Grid>
-            </Grid>
-          
-        </Grid> */}
         <Grid item xs={12}>
-          {/* <Paper> */}
             <Grid container>
               <Grid item xs={6}>
                 <b>{templateA}</b>
@@ -156,10 +149,8 @@ export class AnnotationItem extends React.Component {
                 <b>{templateB}</b>
               </Grid>
             </Grid>
-          {/* </Paper> */}
         </Grid>
         <Grid item xs={12}>
-          {/* <Paper> */}
             <Grid container>
               <Grid item xs={6}>
                 <b>{attributeA}</b>
@@ -168,10 +159,8 @@ export class AnnotationItem extends React.Component {
                 <b>{attributeB}</b>
               </Grid>
             </Grid>
-          {/* </Paper> */}
         </Grid>
         <Grid item xs={12}>
-          {/* <Paper> */}
             <Grid container>
               <Grid item xs={6}>
                 <b>{propA}</b>
@@ -180,22 +169,20 @@ export class AnnotationItem extends React.Component {
                 <b>{propB}</b>
               </Grid>
             </Grid>
-          {/* </Paper> */}
         </Grid>
         </Paper></Grid>
-        <Grid item xs={12}>
-        {/* <Grid container style={{alignItems: 'center'}}> */}
+        <Grid item xs={12} className={role < 2 ? classes.hide : ""}>
         <Grid container className={classes.buttonContainer}>
-          {/* <Grid item className={classes.innerButtonContainer}> */}
-            <Button onClick={this.sendVoteValid}>
+            <Button variant="contained"
+                    className={classes.correct}
+                    onClick={this.sendVoteValid}>
               Correct mapping
             </Button>
-          {/* </Grid>
-          <Grid item className={classes.innerButtonContainer}> */}
-            <Button onClick={this.sendVoteIncorrect}>
+            <Button variant="contained" 
+                    className={classes.error}
+                    onClick={this.sendVoteIncorrect}>
               Wrong mapping
             </Button>
-          {/* </Grid> */}
           </Grid>
         </Grid>
         <Grid item xs={12} className={classes.error}>
@@ -212,7 +199,15 @@ export class AnnotationItem extends React.Component {
             Classified as
           </Typography>
           {classifiedAs}
-        </Grid>
+        </Grid> {/*
+        <Grid item xs={12}>
+          <Typography>
+            Lock mapping edition
+          </Typography>
+          <Button>
+            Lock mapping
+          </Button>
+        </Grid> */}
       </Grid>
       </Paper>
     );

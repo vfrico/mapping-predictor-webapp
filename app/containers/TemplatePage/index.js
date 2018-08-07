@@ -111,10 +111,10 @@ export class TemplatePage extends React.Component {
                   {this.state.templateName}
                 </Typography>
                 <Typography variant="subheading">
-                  Template from <a href={wikiLink}>{this.state.lang}.wikipedia.org</a>
+                  Template from <a target="_blank" href={wikiLink}>{this.state.lang}.wikipedia.org</a>
                 </Typography>
                 <Typography variant="subheading">
-                  Mappings available on <a href={mappingPediaLink}>mappings.dbpedia.org</a>
+                  Mappings available on <a target="_blank" href={mappingPediaLink}>mappings.dbpedia.org</a>
                 </Typography>
               </Grid>
               <Grid item xs={6}>
