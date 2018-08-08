@@ -18,7 +18,7 @@ import reducer from './reducer';
 import saga from './saga';
 import messages from './messages';
 import { Grid, Button, Paper, withStyles, Typography } from '@material-ui/core';
-import { sendVote } from './actions';
+import { sendVote, sendLock } from './actions';
 import { VOTE_CORRECT, VOTE_WRONG } from '../../api/defaults';
 import BrowserStorage from '../../api/browserStorage';
 import VoteAnnotation from '../../components/VoteAnnotation';
@@ -58,24 +58,29 @@ export class AnnotationItem extends React.Component {
   constructor(props) {
     super(props);
   }
-
+/*
   getUserFromStorage = () => {
     const brwst = new BrowserStorage();
     return brwst.getUser();
-  }
+  }*/
 
   sendVoteIncorrect = () => {
     console.log("Wrong mapping")
-    const user = this.getUserFromStorage();
-    const { username, jwt } = user;
+    //const user = this.getUserFromStorage();
+    const { username, jwt } = this.props.user;
     this.props.dispatch(sendVote(VOTE_WRONG, this.props.annotation.id, username, jwt))
   }
 
   sendVoteValid = () => {
     console.log("Valid mapping")
-    const user = this.getUserFromStorage();
-    const { username, jwt } = user;
+    //const user = this.getUserFromStorage();
+    const { username, jwt } = this.props.user;
     this.props.dispatch(sendVote(VOTE_CORRECT, this.props.annotation.id, username, jwt))
+  }
+
+  sendLockAnnotation = () => {
+    console.log("Send lock for annotation " + this.props.annotation.id);
+    this.props.dispatch(sendLock(this.props.annotation.id, this.props.user));
   }
 
   render() {
@@ -96,11 +101,11 @@ export class AnnotationItem extends React.Component {
      * 100 -> Admin user: same as 2
      */
     var role = 0;
-    if (this.props.userRole == "ADMIN") {
+    if (this.props.user.role == "ADMIN") {
       role = 100;
-    } else if (this.props.userRole == "MAPPER") {
+    } else if (this.props.user.role == "MAPPER") {
       role = 1;
-    } else if (this.props.userRole == "ANNOTATOR") {
+    } else if (this.props.user.role == "ANNOTATOR") {
       role = 2;
     }
 
@@ -199,15 +204,15 @@ export class AnnotationItem extends React.Component {
             Classified as
           </Typography>
           {classifiedAs}
-        </Grid> {/*
+        </Grid>
         <Grid item xs={12}>
           <Typography>
             Lock mapping edition
           </Typography>
-          <Button>
+          <Button onClick={this.sendLockAnnotation}>
             Lock mapping
           </Button>
-        </Grid> */}
+        </Grid>
       </Grid>
       </Paper>
     );
@@ -217,7 +222,7 @@ export class AnnotationItem extends React.Component {
 AnnotationItem.propTypes = {
   dispatch: PropTypes.func.isRequired,
   annotation: PropTypes.object.isRequired,
-  userRole: PropTypes.string.isRequired,
+  user: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({

@@ -14,6 +14,8 @@ class ApiCalls {
         this.getTemplatesByLanguage = this.getTemplatesByLanguage.bind(this);
         this.getTemplateInfo = this.getTemplateInfo.bind(this);
         this.sendUserVote = this.sendUserVote.bind(this);
+        this.sendLockAnnotation = this.sendLockAnnotation.bind(this);
+        this.getAnnotationById = this.getAnnotationById.bind(this);
     }
 
     userLogin(username, password) {
@@ -90,6 +92,33 @@ class ApiCalls {
                 }
             }),
         });
+    }
+
+    sendLockAnnotation(annotationId, dateStart, dateEnd, username, jwt) {
+        return fetch(this.baseUri + '/annotations/' + annotationId + '/lock', {
+            method: 'POST',
+            headers: {
+                ... this.defaultHeaders,
+                Authorization: jwt,
+            },
+            body: JSON.stringify({
+                locked: true,
+                dateStart,
+                dateEnd,
+                user: {
+                    username,
+                }
+            })
+        })
+    }
+
+    getAnnotationById(annotationId) {
+        return fetch(this.baseUri + '/annotations/' + annotationId, {
+            method: 'GET',
+            headers: {
+                ... this.defaultHeaders,
+            }
+        })
     }
 }
 

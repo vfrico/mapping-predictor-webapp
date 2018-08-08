@@ -4,7 +4,8 @@
  *
  */
 
-import { DEFAULT_ACTION, SEND_VOTE, VOTE_ACCEPTED, VOTE_REJECTED, DELETE_VOTE_ERROR } from './constants';
+import { DEFAULT_ACTION, SEND_VOTE, VOTE_ACCEPTED, VOTE_REJECTED, DELETE_VOTE_ERROR, 
+         SEND_LOCK, GET_LOCK_SUCCESS, GET_LOCK_ERROR, GET_LOCK_DELETE_ERROR } from './constants';
 
 export function defaultAction() {
   return {
@@ -42,6 +43,37 @@ export function voteRejected(annotationId, payload) {
 export function deleteVoteError(annotationId) {
   return {
     type: DELETE_VOTE_ERROR,
+    annotationId,
+  }
+}
+
+export function sendLock(annotationId, user) {
+  return {
+    type: SEND_LOCK,
+    annotationId,
+    user,
+  }
+}
+
+export function lockSuccess(annotationId, payload) {
+  return {
+    type: GET_LOCK_SUCCESS,
+    annotationId,
+    payload,
+  }
+}
+
+export function lockError(annotationId, payload) {
+  return {
+    type: GET_LOCK_ERROR,
+    annotationId,
+    payload,
+  }
+}
+
+export function lockDeleteError(annotationId) {
+  return {
+    type: GET_LOCK_DELETE_ERROR,
     annotationId,
   }
 }

@@ -6,8 +6,8 @@ import { templateLoaded, templateLoadError } from "./actions";
 import BrowserStorage from '../../api/browserStorage';
 import ApiCalls from '../../api/api';
 import { API_ROUTE } from '../../api/defaults';
-import { SEND_VOTE, DELETE_VOTE_ERROR, VOTE_REJECTED } from '../AnnotationItem/constants';
-import { voteAccepted, voteRejected, deleteError, deleteVoteError } from '../AnnotationItem/actions';
+import { SEND_VOTE, DELETE_VOTE_ERROR, VOTE_REJECTED, SEND_LOCK, GET_LOCK_ERROR } from '../AnnotationItem/constants';
+import { voteAccepted, voteRejected, deleteError, deleteVoteError, lockSuccess, lockError, lockDeleteError } from '../AnnotationItem/actions';
 
 
 
@@ -74,9 +74,42 @@ function* apiCallSendVote(action) {
   }
 }
 
+function* apiCallSendLock(action) {
+  console.log("Api caller to send lock on annotation. Action="+JSON.stringify(action));
+  var api = new ApiCalls(API_ROUTE());
+
+  try {
+    var dateStart = Date.now();
+    var dateEnd = Date.now() + 7 * 24 * 60 * 60 * 1000;
+    const response = yield(call(api.sendLockAnnotation, action.annotationId, dateStart, dateEnd, action.user.username, action.user.jwt));
+    console.log("response was: "+JSON.stringify(response)+" with code: "+response.status);
+    if (response.status === 201) {
+      console.log("call again")
+      const annotation_r = yield call(api.getAnnotationById, action.annotationId);
+      console.log("call to get json from: "+JSON.stringify(annotation_r));
+      const annotation = yield call([annotation_r, annotation_r.json]);
+      console.log("annotation is: "+annotation);
+      yield put(lockSuccess(action.annotationId,annotation));
+
+    } else {
+      const err = yield call([response, response.json])
+      yield put(lockError(action.annotationId, {msg: response.status+": "+JSON.stringify(err)}));
+    }
+  } catch (e) {
+    console.error("Message: "+e.message)
+    yield put(lockError(action.annotationId, {msg: e.message}));
+  }
+
+}
+
 function* delayDeleteError(action) {
   yield delay(5 * 1000);
   yield put(deleteVoteError(action.annotationId));
+}
+
+function* delayDeleteLockError(action) {
+  yield delay(5 * 1000);
+  yield put(lockDeleteError(action.annotationId));
 }
 
 function* sendVoteSaga() {
@@ -88,6 +121,15 @@ function* deleteErrorSaga() {
   yield takeEvery(VOTE_REJECTED, delayDeleteError);
 }
 
+
+function* deleteErrorLockSaga() {
+  yield takeEvery(GET_LOCK_ERROR, delayDeleteLockError);
+}
+
+function* sagaSendLock() {
+  yield takeEvery(SEND_LOCK, apiCallSendLock);
+}
+
 // Individual exports for testing
 export default function* defaultSaga() {
   // See example in containers/HomePage/saga.js
@@ -95,5 +137,7 @@ export default function* defaultSaga() {
     getTemplateSaga(),
     sendVoteSaga(),
     deleteErrorSaga(),
+    sagaSendLock(),
+    deleteErrorLockSaga(),
   ])
 }

@@ -79,7 +79,7 @@ export class TemplatePage extends React.Component {
       annotationsList = (
         this.props.templatepage.template.annotations.map(ann => (
           <Grid item xs={6} className={classes.panel}>
-            <AnnotationItem annotation={ann} userRole={this.state.user.role} key={ann.id}/>
+            <AnnotationItem annotation={ann} user={this.state.user} key={ann.id}/>
           </Grid>
         ))
       )
