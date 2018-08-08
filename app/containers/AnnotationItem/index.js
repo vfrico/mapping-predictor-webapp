@@ -94,6 +94,7 @@ export class AnnotationItem extends React.Component {
 
     var votes = this.props.annotation.votes;
 
+    var locks = this.props.annotation.locks;
     /**
      * 0 -> undefined = no loged in. Can see annotations
      * 1 -> Mapper user: 0 + can lock mappings
@@ -120,6 +121,7 @@ export class AnnotationItem extends React.Component {
           propA = annotation.propA;
           propB = annotation.propB;
           votes = annotation.votes;
+          locks = annotation.locks;
     }
 
 /*
@@ -138,6 +140,49 @@ export class AnnotationItem extends React.Component {
         this.props.annotationitem[this.props.annotation.id].error != undefined) {
       errorMsg = this.props.annotationitem[this.props.annotation.id].error.msg;
     }
+
+    var lockComponent = undefined;
+
+    // Lock
+    if (locks == undefined || locks.length == 0) {
+      // Mapping is not locked
+      lockComponent = (
+        <div>
+          <Typography>
+              Lock mapping edition
+          </Typography>
+          <Button onClick={this.sendLockAnnotation}>
+            Lock mapping
+          </Button>
+        </div>
+      );
+    } else {
+      // Annotation and mapping is locked
+      var user = undefined;
+      locks.forEach(element => {
+        console.log(element);
+        user = element.user.username;
+      });
+
+      var unlockButton = undefined;
+      if (user == this.props.user.username) {
+        unlockButton = (
+          <Button onClick={this.sendLockAnnotation}>
+            Unlock mapping
+          </Button>
+        );
+      }
+
+      lockComponent = (
+        <div>
+          <Typography>
+            This annotation is currently locked by {user}
+          </Typography>
+          {unlockButton}
+        </div>
+      )
+    }
+
 
     const { classes } = this.props;
     
@@ -205,13 +250,15 @@ export class AnnotationItem extends React.Component {
           </Typography>
           {classifiedAs}
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={12}>{/*
           <Typography>
             Lock mapping edition
           </Typography>
           <Button onClick={this.sendLockAnnotation}>
             Lock mapping
           </Button>
+          {JSON.stringify(locks) */} 
+          {lockComponent}
         </Grid>
       </Grid>
       </Paper>
