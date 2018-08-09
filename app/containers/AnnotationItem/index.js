@@ -18,10 +18,11 @@ import reducer from './reducer';
 import saga from './saga';
 import messages from './messages';
 import { Grid, Button, Paper, withStyles, Typography } from '@material-ui/core';
-import { sendVote, sendLock, deleteLock } from './actions';
+import { sendVote, sendLock, deleteLock, getAnnotationHelper } from './actions';
 import { VOTE_CORRECT, VOTE_WRONG } from '../../api/defaults';
 import BrowserStorage from '../../api/browserStorage';
 import VoteAnnotation from '../../components/VoteAnnotation';
+import AnnotationHelper from '../../components/AnnotationHelper';
 
 
 const styles = theme => ({
@@ -92,6 +93,10 @@ export class AnnotationItem extends React.Component {
     this.props.dispatch(sendLock(this.props.annotation.id, this.props.user));
   }
 
+  getHelpers = () => {
+    console.log("Get helpers for annotation " + this.props.annotation.id);
+    this.props.dispatch(getAnnotationHelper(this.props.annotation.id));
+  }
   render() {
     var templateA = this.props.annotation.templateA;
     var templateB = this.props.annotation.templateB;
@@ -200,6 +205,17 @@ export class AnnotationItem extends React.Component {
       }
     }
 
+    // Helper:
+    var HelperElement = undefined;
+    if (this.props.annotationitem[this.props.annotation.id] != undefined &&
+        this.props.annotationitem[this.props.annotation.id].helpers != undefined) {
+      
+      HelperElement = (
+        <AnnotationHelper helpers={this.props.annotationitem[this.props.annotation.id].helpers}
+        />
+      );
+    }
+
 
     const { classes } = this.props;
     
@@ -271,10 +287,19 @@ export class AnnotationItem extends React.Component {
                     onClick={this.sendVoteIncorrect}>
               Wrong mapping
             </Button>
+            <Button onClick={this.getHelpers}>
+              help
+            </Button>
           </Grid>
         </Grid>
         <Grid item xs={12} className={classes.error}>
           {errorMsg}
+        </Grid>
+        <Grid item xs={12} className={HelperElement == undefined? classes.hide : ""}>
+          <Typography>
+            Entities related
+          </Typography>
+          {HelperElement}
         </Grid>
         <Grid item xs={12}>
           <Typography>

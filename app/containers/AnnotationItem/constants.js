@@ -15,3 +15,5 @@ export const GET_LOCK_SUCCESS = 'app/AnnotationItem/GET_LOCK_SUCCESS';
 export const GET_LOCK_ERROR = 'app/AnnotationItem/GET_LOCK_ERROR';
 export const GET_LOCK_DELETE_ERROR = 'app/AnnotationItem/GET_LOCK_DELETE_ERROR';
 export const DELETE_LOCK = 'app/AnnotationItem/DELETE_LOCK';
+export const GET_ANNOTATION_HELPER = 'app/AnnotationItem/GET_ANNOTATION_HELPER';
+export const ANNOTATION_HELPERS_RECEIVED = 'app/AnnotationItem/ANNOTATION_HELPERS_RECEIVED';

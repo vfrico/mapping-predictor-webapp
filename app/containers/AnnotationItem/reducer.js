@@ -6,7 +6,8 @@
 
 import { fromJS } from 'immutable';
 import { DEFAULT_ACTION, SEND_VOTE, VOTE_ACCEPTED, VOTE_REJECTED, DELETE_VOTE_ERROR, 
-  SEND_LOCK, GET_LOCK_SUCCESS, GET_LOCK_ERROR, GET_LOCK_DELETE_ERROR } from './constants';
+  SEND_LOCK, GET_LOCK_SUCCESS, GET_LOCK_ERROR, GET_LOCK_DELETE_ERROR, GET_ANNOTATION_HELPER,
+  ANNOTATION_HELPERS_RECEIVED } from './constants';
 
 export const initialState = fromJS({});
 
@@ -17,6 +18,7 @@ function annotationItemReducer(state = initialState, action) {
       return state;
     case SEND_VOTE:
     case SEND_LOCK:
+    case GET_ANNOTATION_HELPER:
       // The saga will launch API request
       return state;
 
@@ -38,6 +40,10 @@ function annotationItemReducer(state = initialState, action) {
       var newState = state.set(action.annotationId, {error: action.payload});
       return newState;
     
+    case ANNOTATION_HELPERS_RECEIVED:
+      var newState = state.set(action.annotationId, {helpers: action.payload});
+      return newState;
+
     case DELETE_VOTE_ERROR:
     case GET_LOCK_DELETE_ERROR:
       var prevState = state.get(action.annotationId)

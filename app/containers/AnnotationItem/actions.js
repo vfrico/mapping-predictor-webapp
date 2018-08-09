@@ -5,7 +5,8 @@
  */
 
 import { DEFAULT_ACTION, SEND_VOTE, VOTE_ACCEPTED, VOTE_REJECTED, DELETE_VOTE_ERROR, 
-         SEND_LOCK, GET_LOCK_SUCCESS, GET_LOCK_ERROR, GET_LOCK_DELETE_ERROR, DELETE_LOCK } from './constants';
+         SEND_LOCK, GET_LOCK_SUCCESS, GET_LOCK_ERROR, GET_LOCK_DELETE_ERROR,
+         DELETE_LOCK, GET_ANNOTATION_HELPER, ANNOTATION_HELPERS_RECEIVED } from './constants';
 
 export function defaultAction() {
   return {
@@ -82,5 +83,20 @@ export function deleteLock(annotationId, user) {
     type: DELETE_LOCK,
     annotationId, 
     user,
+  }
+}
+
+export function getAnnotationHelper(annotationId) {
+  return {
+    type: GET_ANNOTATION_HELPER,
+    annotationId,
+  }
+}
+
+export function helpersReceived(annotationId, payload) {
+  return {
+    type: ANNOTATION_HELPERS_RECEIVED,
+    annotationId,
+    payload,
   }
 }

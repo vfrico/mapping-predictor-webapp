@@ -6,8 +6,8 @@ import { templateLoaded, templateLoadError, loadTemplate } from "./actions";
 import BrowserStorage from '../../api/browserStorage';
 import ApiCalls from '../../api/api';
 import { API_ROUTE } from '../../api/defaults';
-import { SEND_VOTE, DELETE_VOTE_ERROR, VOTE_REJECTED, SEND_LOCK, GET_LOCK_ERROR, DELETE_LOCK } from '../AnnotationItem/constants';
-import { voteAccepted, voteRejected, deleteError, deleteVoteError, lockSuccess, lockError, lockDeleteError } from '../AnnotationItem/actions';
+import { SEND_VOTE, DELETE_VOTE_ERROR, VOTE_REJECTED, SEND_LOCK, GET_LOCK_ERROR, DELETE_LOCK, GET_ANNOTATION_HELPER } from '../AnnotationItem/constants';
+import { voteAccepted, voteRejected, deleteError, deleteVoteError, lockSuccess, lockError, lockDeleteError, helpersReceived } from '../AnnotationItem/actions';
 
 
 
@@ -128,6 +128,31 @@ function* apiCallSendUnlock(action) {
   }
 }
 
+
+function* apiCallGetHelper(action) {
+  console.log("Api caller to get helpers. Action: "+JSON.stringify(action));
+  var api = new ApiCalls(API_ROUTE());
+
+  try {
+    const response = yield(call(api.getAnnotationHelper, action.annotationId));
+    if (response.status == 200) {
+      const helpers = yield(call([response, response.json]));
+      
+      if (helpers != undefined && !objectIsEmpty(helpers)) {
+        yield put(helpersReceived(action.annotationId, helpers));
+      } else {
+        yield put(lockError(action.annotationId, {msg: "the response is empty"}));
+      }
+    } else {
+      const err = yield call([response, response.json])
+      yield put(lockError(action.annotationId, {msg: response.status+": "+JSON.stringify(err)}));
+    }
+  } catch (e) {
+    console.error("Message: "+e.message)
+    yield put(lockError(action.annotationId, {msg: e.message}));
+  }
+}
+
 function* delayDeleteError(action) {
   yield delay(5 * 1000);
   yield put(deleteVoteError(action.annotationId));
@@ -160,6 +185,10 @@ function* sagaDeleteLock() {
   yield takeEvery(DELETE_LOCK, apiCallSendUnlock);
 }
 
+function* sagaGetAnnotationHelper() {
+  yield takeEvery(GET_ANNOTATION_HELPER, apiCallGetHelper);
+}
+
 // Individual exports for testing
 export default function* defaultSaga() {
   // See example in containers/HomePage/saga.js
@@ -170,5 +199,6 @@ export default function* defaultSaga() {
     sagaSendLock(),
     deleteErrorLockSaga(),
     sagaDeleteLock(),
+    sagaGetAnnotationHelper(),
   ])
 }

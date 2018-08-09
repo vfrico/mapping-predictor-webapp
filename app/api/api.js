@@ -17,6 +17,7 @@ class ApiCalls {
         this.sendLockAnnotation = this.sendLockAnnotation.bind(this);
         this.deleteLockAnnotation = this.deleteLockAnnotation.bind(this);
         this.getAnnotationById = this.getAnnotationById.bind(this);
+        this.getAnnotationHelper = this.getAnnotationHelper.bind(this);
     }
 
     userLogin(username, password) {
@@ -123,9 +124,17 @@ class ApiCalls {
         })
     }
 
-
     getAnnotationById(annotationId) {
         return fetch(this.baseUri + '/annotations/' + annotationId, {
+            method: 'GET',
+            headers: {
+                ... this.defaultHeaders,
+            }
+        })
+    }
+
+    getAnnotationHelper(annotationId) {
+        return fetch(this.baseUri + '/annotations/' + annotationId + '/helpers', {
             method: 'GET',
             headers: {
                 ... this.defaultHeaders,

@@ -148,7 +148,7 @@ export class TemplatePage extends React.Component {
               <Grid container>
               <Grid item xs={12}>
                 <Typography variant="display1">
-                {this.props.templatepage.template.lang}:{this.state.templateName}
+                {this.state.lang}:{this.state.templateName}
                 </Typography>
                 <Typography variant="subheading">
                   Template from <a target="_blank" href={wikiLink}>{this.state.lang}.wikipedia.org</a>
@@ -192,6 +192,7 @@ export class TemplatePage extends React.Component {
 
 TemplatePage.propTypes = {
   dispatch: PropTypes.func.isRequired,
+  templatepage: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
