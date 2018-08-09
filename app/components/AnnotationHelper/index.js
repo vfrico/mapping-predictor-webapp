@@ -30,7 +30,7 @@ class AnnotationHelper extends React.Component {
     if (objectsToUse.length > 0) {
       linkItems = (
         objectsToUse.map(element => {
-          return <p><a href={element}>{element}</a></p>
+          return <p><a href={element} target="_blank">{element}</a></p>
         })
       );
     }
