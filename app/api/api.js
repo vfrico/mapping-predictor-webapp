@@ -15,6 +15,7 @@ class ApiCalls {
         this.getTemplateInfo = this.getTemplateInfo.bind(this);
         this.sendUserVote = this.sendUserVote.bind(this);
         this.sendLockAnnotation = this.sendLockAnnotation.bind(this);
+        this.deleteLockAnnotation = this.deleteLockAnnotation.bind(this);
         this.getAnnotationById = this.getAnnotationById.bind(this);
     }
 
@@ -111,6 +112,17 @@ class ApiCalls {
             })
         })
     }
+
+    deleteLockAnnotation(annotationId, jwt) {
+        return fetch(this.baseUri + '/annotations/' + annotationId + '/lock', {
+            method: 'DELETE',
+            headers: {
+                ... this.defaultHeaders,
+                Authorization: jwt,
+            },
+        })
+    }
+
 
     getAnnotationById(annotationId) {
         return fetch(this.baseUri + '/annotations/' + annotationId, {

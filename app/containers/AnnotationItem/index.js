@@ -18,7 +18,7 @@ import reducer from './reducer';
 import saga from './saga';
 import messages from './messages';
 import { Grid, Button, Paper, withStyles, Typography } from '@material-ui/core';
-import { sendVote, sendLock } from './actions';
+import { sendVote, sendLock, deleteLock } from './actions';
 import { VOTE_CORRECT, VOTE_WRONG } from '../../api/defaults';
 import BrowserStorage from '../../api/browserStorage';
 import VoteAnnotation from '../../components/VoteAnnotation';
@@ -77,6 +77,12 @@ export class AnnotationItem extends React.Component {
     const { username, jwt } = this.props.user;
     this.props.dispatch(sendVote(VOTE_CORRECT, this.props.annotation.id, username, jwt))
   }
+
+  sendUnlockAnnotation = () => {
+    console.log("Send unlock for annotation " + this.props.annotation.id);
+    this.props.dispatch(deleteLock(this.props.annotation.id, this.props.user));
+  }
+
 
   sendLockAnnotation = () => {
     console.log("Send lock for annotation " + this.props.annotation.id);
@@ -144,8 +150,11 @@ export class AnnotationItem extends React.Component {
     var lockComponent = undefined;
 
     // Lock
-    if (locks == undefined || locks.length == 0) {
-      // Mapping is not locked
+    if ((locks == undefined || locks.length == 0) && 
+        this.props.allLocks != undefined &&
+        this.props.allLocks.length == 0 &&
+        role >= 1) {
+      // Only show `Lock Mapping` button if the mapping is "free"
       lockComponent = (
         <div>
           <Typography>
@@ -160,27 +169,31 @@ export class AnnotationItem extends React.Component {
       // Annotation and mapping is locked
       var user = undefined;
       locks.forEach(element => {
-        console.log(element);
         user = element.user.username;
       });
 
       var unlockButton = undefined;
       if (user == this.props.user.username) {
         unlockButton = (
-          <Button onClick={this.sendLockAnnotation}>
+          <Button onClick={this.sendUnlockAnnotation}>
             Unlock mapping
           </Button>
         );
       }
 
-      lockComponent = (
-        <div>
-          <Typography>
-            This annotation is currently locked by {user}
-          </Typography>
-          {unlockButton}
-        </div>
-      )
+      if (user == undefined || user == "") {
+        // If mapping is locked, hide lock box information
+        lockComponent = (<div/>);
+      } else {
+        lockComponent = (
+          <div>
+            <Typography>
+              This annotation is currently locked by {user}
+            </Typography>
+            {unlockButton}
+          </div>
+        )
+      }
     }
 
 
@@ -270,6 +283,7 @@ AnnotationItem.propTypes = {
   dispatch: PropTypes.func.isRequired,
   annotation: PropTypes.object.isRequired,
   user: PropTypes.object.isRequired,
+  allLocks: PropTypes.array,
 };
 
 const mapStateToProps = createStructuredSelector({

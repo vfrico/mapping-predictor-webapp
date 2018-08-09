@@ -2,11 +2,11 @@ import { delay } from 'redux-saga'
 import { call, put, takeEvery, takeLatest, all } from 'redux-saga/effects'
 
 import { LOAD_TEMPLATE } from "./constants";
-import { templateLoaded, templateLoadError } from "./actions";
+import { templateLoaded, templateLoadError, loadTemplate } from "./actions";
 import BrowserStorage from '../../api/browserStorage';
 import ApiCalls from '../../api/api';
 import { API_ROUTE } from '../../api/defaults';
-import { SEND_VOTE, DELETE_VOTE_ERROR, VOTE_REJECTED, SEND_LOCK, GET_LOCK_ERROR } from '../AnnotationItem/constants';
+import { SEND_VOTE, DELETE_VOTE_ERROR, VOTE_REJECTED, SEND_LOCK, GET_LOCK_ERROR, DELETE_LOCK } from '../AnnotationItem/constants';
 import { voteAccepted, voteRejected, deleteError, deleteVoteError, lockSuccess, lockError, lockDeleteError } from '../AnnotationItem/actions';
 
 
@@ -89,7 +89,8 @@ function* apiCallSendLock(action) {
       console.log("call to get json from: "+JSON.stringify(annotation_r));
       const annotation = yield call([annotation_r, annotation_r.json]);
       console.log("annotation is: "+annotation);
-      yield put(lockSuccess(action.annotationId,annotation));
+      yield put(lockSuccess(action.annotationId, annotation));
+      yield put(loadTemplate(annotation.templateB, annotation.langB));
 
     } else {
       const err = yield call([response, response.json])
@@ -99,7 +100,32 @@ function* apiCallSendLock(action) {
     console.error("Message: "+e.message)
     yield put(lockError(action.annotationId, {msg: e.message}));
   }
+}
 
+function* apiCallSendUnlock(action) {
+  console.log("Api caller to send unlock on annotation. Action="+JSON.stringify(action));
+  var api = new ApiCalls(API_ROUTE());
+
+  try {
+    const response = yield(call(api.deleteLockAnnotation, action.annotationId, action.user.jwt));
+    console.log("response was: "+JSON.stringify(response)+" with code: "+response.status);
+    if (response.status === 204) { // deleted successfully
+      console.log("call again")
+      const annotation_r = yield call(api.getAnnotationById, action.annotationId);
+      console.log("call to get json from: "+JSON.stringify(annotation_r));
+      const annotation = yield call([annotation_r, annotation_r.json]);
+      console.log("annotation is: "+annotation);
+      yield put(lockSuccess(action.annotationId, annotation));
+      yield put(loadTemplate(annotation.templateB, annotation.langB));
+
+    } else {
+      const err = yield call([response, response.json])
+      yield put(lockError(action.annotationId, {msg: response.status+": "+JSON.stringify(err)}));
+    }
+  } catch (e) {
+    console.error("Message: "+e.message)
+    yield put(lockError(action.annotationId, {msg: e.message}));
+  }
 }
 
 function* delayDeleteError(action) {
@@ -130,6 +156,10 @@ function* sagaSendLock() {
   yield takeEvery(SEND_LOCK, apiCallSendLock);
 }
 
+function* sagaDeleteLock() {
+  yield takeEvery(DELETE_LOCK, apiCallSendUnlock);
+}
+
 // Individual exports for testing
 export default function* defaultSaga() {
   // See example in containers/HomePage/saga.js
@@ -139,5 +169,6 @@ export default function* defaultSaga() {
     deleteErrorSaga(),
     sagaSendLock(),
     deleteErrorLockSaga(),
+    sagaDeleteLock(),
   ])
 }

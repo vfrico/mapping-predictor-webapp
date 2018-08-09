@@ -72,6 +72,42 @@ export class TemplatePage extends React.Component {
 
   render() {
     const { classes } = this.props;
+    const wikiLink = this.getWikiLink(this.state.templateName, this.state.lang);
+    const mappingPediaLink = this.getMappingPediaLink(this.state.templateName, this.state.lang);
+    
+    // Locks
+    var usersLock = [];
+    if (this.props.templatepage.template != undefined &&
+        this.props.templatepage.template.locks != undefined) {
+      this.props.templatepage.template.locks.forEach(element => {
+        usersLock.push(element.user.username);
+      });
+    }
+    var usersLockSet = new Set(usersLock);
+    usersLock = new Array(...usersLockSet);
+
+    var lockInfoComponent = undefined;
+    if (usersLock == undefined || usersLock.length == 0) {
+      lockInfoComponent = (
+        <p>This template is not being edited by anyone</p>
+      );
+    } else if (usersLockSet.has(this.state.user.username)) {
+      lockInfoComponent = (
+        <p>
+          You own the lock of this mapping. 
+          You can edit the mapping on 
+          this <a href={mappingPediaLink}
+                  target="_blank">link</a>. 
+          Once the mapping is corrected, 
+          please, release the lock on the 
+          corresponding annotation.
+        </p>
+      )
+    } else {
+      lockInfoComponent = (
+        <p>This mapping is currently edited by: <b>{usersLock.join(", ")}</b></p>
+      );
+    }
 
     var annotationsList = undefined;
     var statsDiv = undefined;
@@ -79,7 +115,10 @@ export class TemplatePage extends React.Component {
       annotationsList = (
         this.props.templatepage.template.annotations.map(ann => (
           <Grid item xs={6} className={classes.panel}>
-            <AnnotationItem annotation={ann} user={this.state.user} key={ann.id}/>
+            <AnnotationItem annotation={ann} 
+                            user={this.state.user} 
+                            allLocks={usersLock}
+                            key={ann.id}/>
           </Grid>
         ))
       )
@@ -98,8 +137,6 @@ export class TemplatePage extends React.Component {
         </div>
       );
     }
-    const wikiLink = this.getWikiLink(this.state.templateName, this.state.lang);
-    const mappingPediaLink = this.getMappingPediaLink(this.state.templateName, this.state.lang);
     return (
       <div>
         <Grid container spacing={16} className={classes.container}>
@@ -130,7 +167,7 @@ export class TemplatePage extends React.Component {
                   <Typography variant="title" className={classes.titleSpacing}>
                     Edition locks
                   </Typography>
-                  <p>This mapping is currently edited by: <b>{"anyone"}</b></p>
+                  {lockInfoComponent}
                 </div>
               </Grid>
               </Grid>

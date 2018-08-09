@@ -5,7 +5,7 @@
  */
 
 import { DEFAULT_ACTION, SEND_VOTE, VOTE_ACCEPTED, VOTE_REJECTED, DELETE_VOTE_ERROR, 
-         SEND_LOCK, GET_LOCK_SUCCESS, GET_LOCK_ERROR, GET_LOCK_DELETE_ERROR } from './constants';
+         SEND_LOCK, GET_LOCK_SUCCESS, GET_LOCK_ERROR, GET_LOCK_DELETE_ERROR, DELETE_LOCK } from './constants';
 
 export function defaultAction() {
   return {
@@ -14,7 +14,6 @@ export function defaultAction() {
 }
 
 export function sendVote(voteType, annotationId, username, jwt) {
-  console.log("SENd vote")
   return {
     type: SEND_VOTE,
     voteType,
@@ -75,5 +74,13 @@ export function lockDeleteError(annotationId) {
   return {
     type: GET_LOCK_DELETE_ERROR,
     annotationId,
+  }
+}
+
+export function deleteLock(annotationId, user) {
+  return {
+    type: DELETE_LOCK,
+    annotationId, 
+    user,
   }
 }
