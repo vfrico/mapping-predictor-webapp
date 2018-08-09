@@ -50,6 +50,9 @@ const styles = theme => ({
   hide: {
     visibility: 'collapse',
   },
+  paperContent: {
+    fontSize: '15px',
+  }
 });
 
 /* eslint-disable react/prefer-stateless-function */
@@ -97,7 +100,6 @@ export class AnnotationItem extends React.Component {
     var propA = this.props.annotation.propA;
     var propB = this.props.annotation.propB;
     var classifiedAs = this.props.annotation.classificationResult.classifiedAs;
-
     var votes = this.props.annotation.votes;
 
     var locks = this.props.annotation.locks;
@@ -160,7 +162,8 @@ export class AnnotationItem extends React.Component {
           <Typography>
               Lock mapping edition
           </Typography>
-          <Button onClick={this.sendLockAnnotation}>
+          <Button variant="contained" 
+                  onClick={this.sendLockAnnotation}>
             Lock mapping
           </Button>
         </div>
@@ -175,7 +178,8 @@ export class AnnotationItem extends React.Component {
       var unlockButton = undefined;
       if (user == this.props.user.username) {
         unlockButton = (
-          <Button onClick={this.sendUnlockAnnotation}>
+          <Button variant="contained" 
+                  onClick={this.sendUnlockAnnotation}>
             Unlock mapping
           </Button>
         );
@@ -202,33 +206,54 @@ export class AnnotationItem extends React.Component {
     return (
       <Paper className={classes.annotation}>
       <Grid container spacing={8} className={classes.container}>
-      <Grid item xs={12}><Paper>
+      <Grid item xs={12} className={classes.paperContent}>
+        <Paper>
         <Grid item xs={12}>
             <Grid container>
-              <Grid item xs={6}>
+              <Grid item xs={2}></Grid>
+              <Grid item xs={5} style={{textAlign:'center'}}>
+                {this.props.annotation.langA}
+              </Grid>
+              <Grid item xs={5} style={{textAlign:'center'}}>
+                {this.props.annotation.langB}
+              </Grid>
+            </Grid>
+        </Grid>
+        <Grid item xs={12}>
+            <Grid container>
+              <Grid item xs={2}>
+                Infobox
+              </Grid>
+              <Grid item xs={5}>
                 <b>{templateA}</b>
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={5}>
                 <b>{templateB}</b>
               </Grid>
             </Grid>
         </Grid>
         <Grid item xs={12}>
             <Grid container>
-              <Grid item xs={6}>
+              <Grid item xs={2}>
+                Attribute
+              </Grid>
+              <Grid item xs={5}>
                 <b>{attributeA}</b>
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={5}>
                 <b>{attributeB}</b>
               </Grid>
             </Grid>
         </Grid>
         <Grid item xs={12}>
             <Grid container>
-              <Grid item xs={6}>
+              <Grid item xs={2}>
+                Property
+              </Grid>
+              <Grid item xs={5}>
                 <b>{propA}</b>
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={5}>
                 <b>{propB}</b>
               </Grid>
             </Grid>

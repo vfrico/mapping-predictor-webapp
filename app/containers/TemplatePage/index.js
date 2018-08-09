@@ -126,6 +126,9 @@ export class TemplatePage extends React.Component {
       statsDiv = (
         <div>
           <Typography>
+            <b>Template usages: </b> {this.props.templatepage.template.templateUsages}
+          </Typography>          
+          <Typography>
             <b>All annotations: </b> {this.props.templatepage.template.allAnnotations}
           </Typography>
           <Typography>
@@ -145,7 +148,7 @@ export class TemplatePage extends React.Component {
               <Grid container>
               <Grid item xs={12}>
                 <Typography variant="display1">
-                  {this.state.templateName}
+                {this.props.templatepage.template.lang}:{this.state.templateName}
                 </Typography>
                 <Typography variant="subheading">
                   Template from <a target="_blank" href={wikiLink}>{this.state.lang}.wikipedia.org</a>
