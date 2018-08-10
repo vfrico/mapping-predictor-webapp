@@ -169,7 +169,9 @@ export class TemplateView extends React.Component {
               margin="normal">
             >
               <MenuItem value="es">Spanish</MenuItem>
-              <MenuItem value="en">English</MenuItem>
+              <MenuItem value="el">Greek</MenuItem>
+              <MenuItem value="de">German</MenuItem>
+              <MenuItem value="nl">Dutch</MenuItem>
             </TextField>
           </Grid>
           <Grid item xs={3}>
