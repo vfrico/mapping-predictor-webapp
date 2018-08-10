@@ -13,13 +13,13 @@ function* apiCaller(action) {
   var api = new ApiCalls(API_ROUTE());
   // yield call();  // To really call 
   try {
+    // Remove login credentials even if API call fails
+    var brwst = new BrowserStorage();
+    brwst.removeUser();
+
     const response = yield call(api.userLogout, action.username, action.jwt);
     
     if (response.status === 204) {
-      // If logout was successful, delete from local storage
-      var brwst = new BrowserStorage();
-      brwst.removeUser();
-
       // send actual action
       yield put(logoutSuccess());
       yield put(deleteErrorUserPage());
