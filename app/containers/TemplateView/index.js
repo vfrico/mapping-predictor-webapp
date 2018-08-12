@@ -24,6 +24,7 @@ import TemplateItem from '../../components/TemplateItem';
 import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
 import { Button, withStyles, Grid, Typography, Paper } from '@material-ui/core';
+import BrowserStorage from '../../api/browserStorage';
 
 
 const styles = theme => ({
@@ -71,12 +72,16 @@ const styles = theme => ({
 export class TemplateView extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
+    this.brwst = new BrowserStorage();
+    var brwstate = this.brwst.getUserPrefs("templateview", {
       lang: "es",
       descending: true, // Used in sorting function
       sortKey: "wrongAnnotations", // Used in sorting function
       sortFunction: this.numericSort,
-    };
+    });
+    this.state = {
+      ... brwstate,
+    }
     // props.dispatch(defaultAction());
     // this.sleep(4000);
     // console.log("new props");
@@ -100,6 +105,11 @@ export class TemplateView extends React.Component {
 
   componentDidMount() {
     this.callFunction();
+  }
+
+  componentWillUpdate(nextProps, nextState) {
+    console.log("update: "+JSON.stringify(nextState));
+    this.brwst.saveUserPrefs("templateview", nextState);
   }
 
   sleep(ms) {
