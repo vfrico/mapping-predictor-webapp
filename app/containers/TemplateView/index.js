@@ -17,13 +17,13 @@ import makeSelectTemplateView, { makeTestSelector } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 import messages from './messages';
-import { defaultAction, loadTemplates } from './actions';
+import { defaultAction, loadTemplates, loadLangPairs } from './actions';
 import TemplateItem from '../../components/TemplateItem';
 
 
 import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
-import { Button, withStyles, Grid, Typography, Paper } from '@material-ui/core';
+import { Button, withStyles, Grid, Typography, Paper, Menu } from '@material-ui/core';
 import BrowserStorage from '../../api/browserStorage';
 
 
@@ -73,19 +73,32 @@ export class TemplateView extends React.Component {
   constructor(props) {
     super(props);
     this.brwst = new BrowserStorage();
+    var brwlangs = this.brwst.getUserPrefs("langPairs", {
+      langPairs: [
+        {langA: "en", langB: "es"},
+      ]
+    });
+
+    this.state = {
+      langPair: brwlangs.langPairs[0],
+    }
+
     var brwstate = this.brwst.getUserPrefs("templateview", {
-      lang: "es",
+      langPair: brwlangs.langPairs[0],
       descending: true, // Used in sorting function
       sortKey: "wrongAnnotations", // Used in sorting function
       sortFunction: this.numericSort,
     });
+
     this.state = {
+      ... this.state,
       ... brwstate,
+      langPairs: brwlangs.langPairs,
     }
     // props.dispatch(defaultAction());
     // this.sleep(4000);
     // console.log("new props");
-    // console.log(props);
+    console.log(this.state);
   }
 
 
@@ -97,9 +110,19 @@ export class TemplateView extends React.Component {
     }
   }
 
-  handleChange = event => {
+  handleChangeLangA = event => {
+    var langPair = this.state.langPair;
+    langPair.langA = event.target.value;
     this.setState({
-      lang: event.target.value,
+      langPair,
+    });
+  };
+
+  handleChangeLangB = event => {
+    var langPair = this.state.langPair;
+    langPair.langB = event.target.value;
+    this.setState({
+      langPair,
     });
   };
 
@@ -108,7 +131,6 @@ export class TemplateView extends React.Component {
   }
 
   componentWillUpdate(nextProps, nextState) {
-    console.log("update: "+JSON.stringify(nextState));
     this.brwst.saveUserPrefs("templateview", nextState);
   }
 
@@ -118,8 +140,15 @@ export class TemplateView extends React.Component {
 
   /* Calls the API to get templates */
   callFunction = () => {
-    this.props.dispatch(loadTemplates(this.state.lang));
+    this.props.dispatch(loadTemplates(this.state.langPair.langA,this.state.langPair.langB));
+    this.props.dispatch(loadLangPairs());
   }
+
+  loadTemplates = () => {
+    this.props.dispatch(loadTemplates(this.state.langPair.langA,this.state.langPair.langB));
+  }
+
+  
 
   changeToNumericSort = (key) => {
     var desc = this.state.descending;
@@ -143,6 +172,23 @@ export class TemplateView extends React.Component {
     }
   }
 
+  getLanguageFromIsoCode = (code) => {
+    switch(code) {
+      case "es":
+        return "Spanish";
+      case "en":
+        return "English";
+      case "el":
+        return "Greek";
+      case "nl":
+        return "Dutch";
+      case "de":
+        return "German";
+      default:
+        return code;
+    }
+  }
+
   render() {
 
     var templatesItems = undefined;
@@ -157,7 +203,23 @@ export class TemplateView extends React.Component {
       })
     }
 
+    var validLangPairs = this.state.langPairs;
+    if (this.props.templateview.langPairs != undefined) {
+      validLangPairs = this.props.templateview.langPairs;
+    }
+
+
+    var errorMsg = undefined;
+    if (this.props.templateview.error != undefined) {
+      errorMsg = this.props.templateview.error.msg;
+    }
     const { classes } = this.props;
+
+    var langsA = Array.from(new Set(this.state.langPairs.map(element => element.langA)));
+    var langsB = Array.from(new Set(this.state.langPairs.map(element => element.langB)));
+    ///console.log(langsA, langsB);
+    //var itemsMenuLangA = ;
+    //var itemsMenuLangB = new Array(langsB).map(element => <MenuItem value={element}>{element}</MenuItem>)
 
     return (
       <div className={classes.container}>
@@ -170,29 +232,44 @@ export class TemplateView extends React.Component {
               Filter templates by language: 
             </Typography>
           </Grid>
-          <Grid item xs={1} className={classes.filterDropdown}>
+          <Grid item xs={3} className={classes.filterDropdown}>
             <TextField
-              id="templates-lang"
+              id="templates-lang-A"
               select
-              value={this.state.lang}
-              onChange={this.handleChange}
+              value={this.state.langPair.langA}
+              onChange={this.handleChangeLangA}
               margin="normal">
             >
-              <MenuItem value="es">Spanish</MenuItem>
-              <MenuItem value="el">Greek</MenuItem>
-              <MenuItem value="de">German</MenuItem>
-              <MenuItem value="nl">Dutch</MenuItem>
+            {langsA.map(element => {
+              return (
+                <MenuItem value={element}>{this.getLanguageFromIsoCode(element)}</MenuItem>
+              )
+            })}
+            </TextField>
+              &nbsp;&nbsp;
+            <TextField
+              id="templates-lang-B"
+              select
+              value={this.state.langPair.langB}
+              onChange={this.handleChangeLangB}
+              margin="normal">
+            >
+            {langsB.map(element => {
+              return (
+                <MenuItem value={element}>{this.getLanguageFromIsoCode(element)}</MenuItem>
+              )
+            })}
             </TextField>
           </Grid>
           <Grid item xs={3}>
-            <Button onClick={this.callFunction}
+            <Button onClick={this.loadTemplates}
                     className={classes.innerFilterElement}
                     style={{textAlign:'left'}}>
                 Get templates
               </Button>
           </Grid>
         </Grid>
-        
+        <p>{errorMsg}</p>
         <div>
           <div className={classes.root}>
           <Grid container>

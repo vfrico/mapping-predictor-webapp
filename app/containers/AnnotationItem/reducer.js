@@ -12,7 +12,7 @@ import { DEFAULT_ACTION, SEND_VOTE, VOTE_ACCEPTED, VOTE_REJECTED, DELETE_VOTE_ER
 export const initialState = fromJS({});
 
 function annotationItemReducer(state = initialState, action) {
-  console.log("AnnotationItem reducer with action="+JSON.stringify(action))
+  //console.log("AnnotationItem reducer with action="+JSON.stringify(action))
   switch (action.type) {
     case DEFAULT_ACTION:
       return state;

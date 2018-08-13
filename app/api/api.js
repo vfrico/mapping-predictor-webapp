@@ -18,6 +18,7 @@ class ApiCalls {
         this.deleteLockAnnotation = this.deleteLockAnnotation.bind(this);
         this.getAnnotationById = this.getAnnotationById.bind(this);
         this.getAnnotationHelper = this.getAnnotationHelper.bind(this);
+        this.getLangPairs = this.getLangPairs.bind(this);
     }
 
     userLogin(username, password) {
@@ -60,8 +61,8 @@ class ApiCalls {
         })
     }
 
-    getTemplatesByLanguage(language) {
-        return fetch(this.baseUri + '/templates?lang=' + language , {
+    getTemplatesByLanguage(langA, langB) {
+        return fetch(this.baseUri + '/templates?langA=' + langA + '&langB='+langB , {
             method: 'GET',
             headers: {
                 ... this.defaultHeaders,
@@ -135,6 +136,15 @@ class ApiCalls {
 
     getAnnotationHelper(annotationId) {
         return fetch(this.baseUri + '/annotations/' + annotationId + '/helpers', {
+            method: 'GET',
+            headers: {
+                ... this.defaultHeaders,
+            }
+        })
+    }
+
+    getLangPairs() {
+        return fetch(this.baseUri + '/templates/langPairs', {
             method: 'GET',
             headers: {
                 ... this.defaultHeaders,
