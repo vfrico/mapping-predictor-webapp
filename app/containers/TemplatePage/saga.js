@@ -9,7 +9,21 @@ import { API_ROUTE } from '../../api/defaults';
 import { SEND_VOTE, DELETE_VOTE_ERROR, VOTE_REJECTED, SEND_LOCK, GET_LOCK_ERROR, DELETE_LOCK, GET_ANNOTATION_HELPER } from '../AnnotationItem/constants';
 import { voteAccepted, voteRejected, deleteError, deleteVoteError, lockSuccess, lockError, lockDeleteError, helpersReceived } from '../AnnotationItem/actions';
 
-
+/* 
+ * Copyright 2018 Víctor Fernández <vfrico@gmail.com>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/
 
 var objectIsEmpty = obj => {
   try {
