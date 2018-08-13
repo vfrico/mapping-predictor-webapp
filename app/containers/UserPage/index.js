@@ -189,20 +189,26 @@ export class UserPage extends React.Component {
               Admin section
             </Typography>
             <div className={classes.innerContainer}>
-              <Typography variant="title">
+              <Typography variant="title" paragraph>
                 Load annotations
               </Typography>
-              <Typography>
-                <p>It is possible to add more annotations by uploading a CSV file that contains
-                the annotations with their respective M, C and TB attributes.</p>
-                <p>The system needs to know also the two languages that involves each annotation. 
-                  At this moment, you should only submit one language pair at once.</p>
-                <p>You can check out some examples&nbsp;
+              <Typography variant="body1" paragraph>
+                It is possible to add more annotations by uploading a CSV file that contains
+                the annotations with their respective M, C and TB attributes.
+              </Typography>
+              <Typography variant="body1" paragraph>
+                The system needs to know also the two languages that involves each annotation. 
+                At this moment, you should only submit one language pair at once.
+              </Typography>
+              <Typography variant="body1" paragraph>
+                You can check out some examples&nbsp;
                 <a href="https://github.com/vfrico/mapping-predictor-backend/tree/master/src/main/resources/csv">
                   here
-                </a>.</p>
-                <p>Note: The triples will not be overriden by sending a CSV file. They will 
-                  be added to the existing ones</p>
+                </a>.
+              </Typography>
+              <Typography variant="body1" paragraph>
+                Note: The triples will not be overriden by sending a CSV file. They will 
+                be added to the existing ones
               </Typography>
               {/* <form action={base+queryParams} method="post" enctype="multipart/form-data"> */}
                 <TextField
@@ -236,13 +242,15 @@ export class UserPage extends React.Component {
             </div>
             <br/>
             <div className={classes.innerContainer}>
-              <Typography variant="title">
+              <Typography variant="title" paragraph>
                 Classify triples
               </Typography>
-              <Typography>
-                <p>The system only can classify the annotations by a language pair. You have to select 
-                which are the language codes that has to be classified.</p>
-                <p>The previous classification result will been overriden</p>
+              <Typography paragraph>
+                The system only can classify the annotations by a language pair. You have to select 
+                which are the language codes that has to be classified.
+              </Typography>
+              <Typography paragraph>
+                The previous classification result will been overriden.
               </Typography>
               <TextField
                   id="langA"

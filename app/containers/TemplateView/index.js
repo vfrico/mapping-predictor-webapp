@@ -242,26 +242,22 @@ export class TemplateView extends React.Component {
           width: "100%",
           padding: "1em",
         }}>
-          <Typography variant="title">
+          <Typography variant="title" paragraph>
             Help
           </Typography>
-          <br/>
-          <Typography>
+          <Typography paragraph>
             This web application allows you to vote for annotations to improve 
             the quality and consistency of DBpedia mappings across all languages.
           </Typography>
-          <br/>
-          <Typography>
+          <Typography paragraph>
             An annotation is a concept that relates two Wikipedia Infobox attributes, in two
             languages. An annotation can be correct or wrong. You can view all the annotations
             related with one template by selecting one of the templates shown below.
           </Typography>
-          <br/>
-          <Typography>
+          <Typography paragraph>
             In this view you can filter all the templates by the language and by the language
             of the annotations which is related.
           </Typography>
-          <br/>
           <Button onClick={this.hideHelp}
                 className={classes.innerFilterElement}
                 style={{textAlign:'left'}}>
@@ -360,7 +356,10 @@ export class TemplateView extends React.Component {
             </Grid>
           </Grid>
           </div>
-          {templatesItems}
+          {templatesItems != undefined && templatesItems.length > 0 ?
+            templatesItems :
+            (<Typography>No annotations with the current language pair selected.</Typography>)  
+        }
         </div>
         {/* <p>{JSON.stringify(this.props.templateview)}</p>
         <p>{JSON.stringify(this.state)}</p> */}

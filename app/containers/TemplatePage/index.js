@@ -195,23 +195,20 @@ export class TemplatePage extends React.Component {
               width: "100%",
               padding: "1em",
             }}>
-            <Typography variant="title">
+            <Typography variant="title" paragraph>
               Help
             </Typography>
-            <br/>
-            <Typography>
+            <Typography paragraph>
               If you have an user with mapping role, you can lock a mapping to edit 
               on the DBpedia Mappings Wiki. This is useful to inform other users the
               work you are doing and avoid concurrent modification issues.
             </Typography>
-            <br/>
-            <Typography>
+            <Typography paragraph>
               Additionally, users with annotator role can vote each annotation as valid or
               wrong, by considering the template and attribute used and comparing with the
               property assigned. This users also can get entities that uses this specific
               attributes, in order to understand better the context.
             </Typography>
-            <br/>
             <Button onClick={this.hideHelp}
                 style={{textAlign:'left'}}>
             Hide help
