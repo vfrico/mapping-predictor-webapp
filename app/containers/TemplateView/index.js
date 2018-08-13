@@ -215,8 +215,8 @@ export class TemplateView extends React.Component {
     }
     const { classes } = this.props;
 
-    var langsA = Array.from(new Set(this.state.langPairs.map(element => element.langA)));
-    var langsB = Array.from(new Set(this.state.langPairs.map(element => element.langB)));
+    var langsA = Array.from(new Set(validLangPairs.map(element => element.langA)));
+    var langsB = Array.from(new Set(validLangPairs.map(element => element.langB)));
     ///console.log(langsA, langsB);
     //var itemsMenuLangA = ;
     //var itemsMenuLangB = new Array(langsB).map(element => <MenuItem value={element}>{element}</MenuItem>)
