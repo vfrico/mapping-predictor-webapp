@@ -88,6 +88,7 @@ export class TemplateView extends React.Component {
       descending: true, // Used in sorting function
       sortKey: "wrongAnnotations", // Used in sorting function
       sortFunction: this.numericSort,
+      showHelp: true,
     });
 
     this.state = {
@@ -172,6 +173,18 @@ export class TemplateView extends React.Component {
     }
   }
 
+  showHelp = () => {
+    this.setState({
+      showHelp: true,
+    })
+  }
+
+  hideHelp = () => {
+    this.setState({
+      showHelp: false,
+    })
+  }
+
   getLanguageFromIsoCode = (code) => {
     switch(code) {
       case "es":
@@ -223,16 +236,69 @@ export class TemplateView extends React.Component {
 
     return (
       <div className={classes.container}>
-        
+        {this.state.showHelp ? (
+        <Grid container className={classes.root}>
+        <Paper style={{
+          width: "100%",
+          padding: "1em",
+        }}>
+          <Typography variant="title">
+            Help
+          </Typography>
+          <br/>
+          <Typography>
+            This web application allows you to vote for annotations to improve 
+            the quality and consistency of DBpedia mappings across all languages.
+          </Typography>
+          <br/>
+          <Typography>
+            An annotation is a concept that relates two Wikipedia Infobox attributes, in two
+            languages. An annotation can be correct or wrong. You can view all the annotations
+            related with one template by selecting one of the templates shown below.
+          </Typography>
+          <br/>
+          <Typography>
+            In this view you can filter all the templates by the language and by the language
+            of the annotations which is related.
+          </Typography>
+          <br/>
+          <Button onClick={this.hideHelp}
+                className={classes.innerFilterElement}
+                style={{textAlign:'left'}}>
+            Hide help
+          </Button>
+        </Paper>
+        </Grid>
+      ) : "" }
         <Grid container className={classes.topFilter}>
           <Grid item xs={3}>
             <Typography 
               className={classes.innerFilterElement}
               style={{textAlign:'right', marginTop: '21px'}}>
-              Filter templates by language: 
+              Get templates in
             </Typography>
           </Grid>
-          <Grid item xs={3} className={classes.filterDropdown}>
+          <Grid item xs={5} className={classes.filterDropdown}>
+          <TextField
+              id="templates-lang-B"
+              select
+              value={this.state.langPair.langB}
+              onChange={this.handleChangeLangB}
+              margin="normal">
+            >
+            {langsB.map(element => {
+              return (
+                <MenuItem value={element}>{this.getLanguageFromIsoCode(element)}</MenuItem>
+              )
+            })}
+            </TextField>
+            &nbsp;
+            <Typography 
+              className={classes.innerFilterElement}
+              style={{textAlign:'right', marginTop: '21px'}}>
+              that contains annotations in 
+            </Typography>
+            &nbsp;
             <TextField
               id="templates-lang-A"
               select
@@ -246,27 +312,19 @@ export class TemplateView extends React.Component {
               )
             })}
             </TextField>
-              &nbsp;&nbsp;
-            <TextField
-              id="templates-lang-B"
-              select
-              value={this.state.langPair.langB}
-              onChange={this.handleChangeLangB}
-              margin="normal">
-            >
-            {langsB.map(element => {
-              return (
-                <MenuItem value={element}>{this.getLanguageFromIsoCode(element)}</MenuItem>
-              )
-            })}
-            </TextField>
+            
           </Grid>
-          <Grid item xs={3}>
+          <Grid item xs={4}>
             <Button onClick={this.loadTemplates}
                     className={classes.innerFilterElement}
                     style={{textAlign:'left'}}>
                 Get templates
               </Button>
+              {this.state.showHelp ? "" : <Button onClick={this.showHelp}
+                    className={classes.innerFilterElement}
+                    style={{textAlign:'left'}}>
+                Show help
+            </Button> }
           </Grid>
         </Grid>
         <p>{errorMsg}</p>
