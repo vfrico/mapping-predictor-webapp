@@ -54,7 +54,20 @@ export class TemplatePage extends React.Component {
       templateName: this.props.match.params.templateName,
       // It is easier (and maybe faster too) to read from local Storage than from App state :(
       user: brwst.getUser(),
+      showHelp: false,
     }
+  }
+
+  showHelp = () => {
+    this.setState({
+      showHelp: true,
+    })
+  }
+
+  hideHelp = () => {
+    this.setState({
+      showHelp: false,
+    })
   }
 
   componentWillMount() {
@@ -176,10 +189,48 @@ export class TemplatePage extends React.Component {
               </Grid>
             </Paper>
           </Grid>
+          {this.state.showHelp ? (
           <Grid item xs={12} className={classes.panel}>
+          <Paper style={{
+              width: "100%",
+              padding: "1em",
+            }}>
+            <Typography variant="title">
+              Help
+            </Typography>
+            <br/>
+            <Typography>
+              If you have an user with mapping role, you can lock a mapping to edit 
+              on the DBpedia Mappings Wiki. This is useful to inform other users the
+              work you are doing and avoid concurrent modification issues.
+            </Typography>
+            <br/>
+            <Typography>
+              Additionally, users with annotator role can vote each annotation as valid or
+              wrong, by considering the template and attribute used and comparing with the
+              property assigned. This users also can get entities that uses this specific
+              attributes, in order to understand better the context.
+            </Typography>
+            <br/>
+            <Button onClick={this.hideHelp}
+                style={{textAlign:'left'}}>
+            Hide help
+          </Button>
+          </Paper>
+          </Grid>
+          ) : "" }
+          <Grid item xs={12} className={classes.panel} style={{
+            display: 'flex',
+            justifyContent: "space-between",
+          }}>
             <Typography variant="headline">
               Available annotations:
             </Typography>
+            {this.state.showHelp? "" : (
+            <Button onClick={this.showHelp}>
+              Show help
+            </Button>
+            )}
           </Grid>
          {/* <Grid item xs={6} className={classes.panel}> */}
               {annotationsList}
