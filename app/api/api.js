@@ -19,6 +19,8 @@ class ApiCalls {
         this.getAnnotationById = this.getAnnotationById.bind(this);
         this.getAnnotationHelper = this.getAnnotationHelper.bind(this);
         this.getLangPairs = this.getLangPairs.bind(this);
+        this.postCSVAnnotations = this.postCSVAnnotations.bind(this);
+        this.postClassifyAnnotations = this.postClassifyAnnotations.bind(this);
     }
 
     userLogin(username, password) {
@@ -146,6 +148,26 @@ class ApiCalls {
     getLangPairs() {
         return fetch(this.baseUri + '/templates/langPairs', {
             method: 'GET',
+            headers: {
+                ... this.defaultHeaders,
+            }
+        })
+    }
+
+    postCSVAnnotations(langA, langB, csvFile) {
+        var formData = new FormData(csvFile.form);
+        formData.append("file", csvFile);
+        
+        return fetch(this.baseUri + '/installation/fromCSV?langa=' + langA + "&langb=" + langB , {
+            method: 'POST',
+            headers: {"Accept": "application/json"},
+            body: formData,
+        })
+    }
+
+    postClassifyAnnotations(langA, langB) {
+        return fetch(this.baseUri + '/annotations/classify?langa=' + langA + '&langb=' + langB, {
+            method: 'POST',
             headers: {
                 ... this.defaultHeaders,
             }
