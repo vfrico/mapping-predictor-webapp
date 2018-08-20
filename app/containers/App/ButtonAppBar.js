@@ -93,9 +93,9 @@ class ButtonAppBar extends React.Component {
       <div className={classes.root}>
         <AppBar position="static">
           <Toolbar className={classes.button}>
-            <IconButton className={classes.menuButton} aria-label="Menu">
+            {/* <IconButton className={classes.menuButton} aria-label="Menu">
               <MenuIcon />
-            </IconButton>
+            </IconButton> */}
             <Typography variant="title" className={classes.flex}>
               <Link to="/" className={classes.textLink}>DBpedia mappings</Link>
               {/* {JSON.stringify(userInfo)} {loggedIn} */}
