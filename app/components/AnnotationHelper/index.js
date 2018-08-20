@@ -19,12 +19,63 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 // import styled from 'styled-components';
+import { Button, Typography } from '@material-ui/core';
 
 /* eslint-disable react/prefer-stateless-function */
 class AnnotationHelper extends React.Component {
 
-  getRelatedTriples = () => {
-    return this.props.helpers.relatedTriples;
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      relatedTriples: this.getRelatedTriples(),
+      lastShuffle: this.props.shuffle,
+    }
+  }
+
+  componentWillReceiveProps = (props) => {
+    try {
+      // Shuffle props if a new shuffle value is injected
+      if (this.state.lastShuffle != props.shuffle) {
+        this.setState({
+          lastShuffle: props.shuffle,
+        })
+        this.shuffle();
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  shuffle = () => {
+    console.log("SHUFFLE")
+    this.setState({
+      relatedTriples: this.getRelatedTriples(),
+    })
+  }
+
+  getRelatedTriples = () => {  
+    var list = new Array(... new Set(this.props.helpers.relatedTriples));
+    var chosenRelatedTriples = [];
+    for (var i = 0; i < 3; i++) {
+      var { item, list } = this.getRandom(list);
+      chosenRelatedTriples.push(item);
+    }
+    return chosenRelatedTriples;
+    //return this.props.helpers.relatedTriples;
+  }
+
+  getRandom = (list) => {
+    var i = Math.floor(Math.random()*list.length);
+    return { "item": list.splice(i, 1)[0], "list": list };
+  }
+
+  getRelevantSubjects = () => {
+    var subjectList = [];
+    this.getRelatedTriples().forEach(element => {
+      subjectList.push(element.subject);
+    });
+    return subjectList;//.slice(0, 2);
   }
 
   getRelevantObjects = () => {
@@ -32,23 +83,43 @@ class AnnotationHelper extends React.Component {
     this.getRelatedTriples().forEach(element => {
       objectList.push(element.object);
     });
-    return objectList.slice(0, 2);
+    return objectList;//new Array(... new Set(objectList));//.slice(0, 2);
+  }
+
+  urlShortener = (url) => {
+    var newUrl = url.replace("http://dbpedia.org/resource/", "dbr:");
+    newUrl = newUrl.replace("http://dbpedia.org/ontology/", "dbo:");
+    return newUrl;
   }
 
   render() {
 
     var linkItems = undefined;
-    const objectsToUse = this.getRelevantObjects();
-    if (objectsToUse.length > 0) {
+    const objectsToUse = this.state.relatedTriples;
+    if (objectsToUse != undefined && objectsToUse.length > 0) {
       linkItems = (
-        objectsToUse.map(element => {
-          return <p><a href={element} target="_blank">{element}</a></p>
+        objectsToUse.map(element => {          
+          var subject = this.urlShortener(element.subject);
+          var predicate = this.urlShortener(element.predicate);
+          var object = this.urlShortener(element.object);
+          return (
+          <p>
+            <a href={element.subject} target="_blank">{subject}</a>
+            <span> - </span>
+            <a href={element.predicate} target="_blank">{predicate}</a>
+            <span> - </span>
+            <a href={element.object} target="_blank">{object}</a>
+          </p>
+          );
         })
       );
     }
 
     return (
       <div>
+        <Typography>
+          Entities related: 
+        </Typography>
         {linkItems}
         {/*JSON.stringify(this.getRelevantObjects())*/}
         {/*JSON.stringify(this.props.helpers)*/}
@@ -59,6 +130,7 @@ class AnnotationHelper extends React.Component {
 
 AnnotationHelper.propTypes = {
   helpers: PropTypes.object.isRequired,
+  shuffle: PropTypes.string,
 };
 
 export default AnnotationHelper;

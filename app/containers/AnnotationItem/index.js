@@ -72,7 +72,14 @@ const styles = theme => ({
 export class AnnotationItem extends React.Component {
 
   constructor(props) {
-    super(props);
+    super({
+      ...props,
+      lastShuffled: (new Date()).getTime(),
+    });
+    // this.state = {
+    //   shuffle: 
+    // }
+    this.lastShuffled = (new Date()).getTime();
   }
 /*
   getUserFromStorage = () => {
@@ -108,6 +115,7 @@ export class AnnotationItem extends React.Component {
   getHelpers = () => {
     console.log("Get helpers for annotation " + this.props.annotation.id);
     this.props.dispatch(getAnnotationHelper(this.props.annotation.id));
+    this.lastShuffled = (new Date()).getTime();
   }
   render() {
     var templateA = this.props.annotation.templateA;
@@ -224,6 +232,7 @@ export class AnnotationItem extends React.Component {
       
       HelperElement = (
         <AnnotationHelper helpers={this.props.annotationitem[this.props.annotation.id].helpers}
+        shuffle={this.lastShuffled}
         />
       );
     }
@@ -308,9 +317,6 @@ export class AnnotationItem extends React.Component {
           {errorMsg}
         </Grid>
         <Grid item xs={12} className={HelperElement == undefined? classes.hide : ""}>
-          <Typography>
-            Entities related
-          </Typography>
           {HelperElement}
         </Grid>
         <Grid item xs={12}>
