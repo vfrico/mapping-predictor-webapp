@@ -35,6 +35,7 @@ import { VOTE_CORRECT, VOTE_WRONG } from '../../api/defaults';
 import BrowserStorage from '../../api/browserStorage';
 import VoteAnnotation from '../../components/VoteAnnotation';
 import AnnotationHelper from '../../components/AnnotationHelper';
+import ClassifiedAsInfo from '../../components/ClassifiedAsInfo';
 
 
 const styles = theme => ({
@@ -124,7 +125,7 @@ export class AnnotationItem extends React.Component {
     var attributeB = this.props.annotation.attributeB;
     var propA = this.props.annotation.propA;
     var propB = this.props.annotation.propB;
-    var classifiedAs = this.props.annotation.classificationResult.classifiedAs;
+    var classificationResult = this.props.annotation.classificationResult;
     var votes = this.props.annotation.votes;
 
     var locks = this.props.annotation.locks;
@@ -329,7 +330,8 @@ export class AnnotationItem extends React.Component {
           <Typography>
             Classified as
           </Typography>
-          {classifiedAs}
+          <ClassifiedAsInfo classificationResult={classificationResult}/>
+          {/* {classifiedAs} */}
         </Grid>
         <Grid item xs={12}>{/*
           <Typography>
