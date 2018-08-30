@@ -73,10 +73,11 @@ const styles = theme => ({
 export class AnnotationItem extends React.Component {
 
   constructor(props) {
-    super({
+    super(props);
+    /*super({
       ...props,
       lastShuffled: (new Date()).getTime(),
-    });
+    });*/
     // this.state = {
     //   shuffle: 
     // }

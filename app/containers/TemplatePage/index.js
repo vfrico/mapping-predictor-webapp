@@ -139,8 +139,16 @@ export class TemplatePage extends React.Component {
     var annotationsList = undefined;
     var statsDiv = undefined;
     if(this.props.templatepage.template != undefined) {
+      var foundAnnotations = this.props.templatepage.template.annotations;
+
+      foundAnnotations = foundAnnotations.sort((a, b) => {
+        var intA = a.classificationResult.votesMap["CORRECT_MAPPING"];
+        var intB = b.classificationResult.votesMap["CORRECT_MAPPING"];
+        return intB - intA;
+      })
+
       annotationsList = (
-        this.props.templatepage.template.annotations.map(ann => (
+        foundAnnotations.map(ann => (
           <Grid item xs={6} className={classes.panel}>
             <AnnotationItem annotation={ann} 
                             user={this.state.user} 

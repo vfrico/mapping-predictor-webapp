@@ -12,7 +12,6 @@ import PropTypes from 'prop-types';
 class ClassifiedAsInfo extends React.Component {
 
   getHighestPair = (votesMap) => {
-    console.log(votesMap)
     if (votesMap.WRONG_MAPPING > 0.5) {
       return {
         result: "Inconsitent relation",
