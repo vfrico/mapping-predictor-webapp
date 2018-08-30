@@ -156,7 +156,7 @@ export class TemplatePage extends React.Component {
             <b>Template usages: </b> {this.props.templatepage.template.templateUsages}
           </Typography>          
           <Typography>
-            <b>All annotations: </b> {this.props.templatepage.template.allAnnotations}
+            <b>All relations: </b> {this.props.templatepage.template.allAnnotations}
           </Typography>
           <Typography>
             <b>Correct: </b> {this.props.templatepage.template.correctAnnotations}
@@ -218,8 +218,8 @@ export class TemplatePage extends React.Component {
               work you are doing and avoid concurrent modification issues.
             </Typography>
             <Typography paragraph>
-              Additionally, users with annotator role can vote each annotation as valid or
-              wrong, by considering the template and attribute used and comparing with the
+              Additionally, users with annotator role can vote each relation as consistent or
+              inconsistent, by considering the template and attribute used and comparing with the
               property assigned. This users also can get entities that uses this specific
               attributes, in order to understand better the context.
             </Typography>
@@ -235,7 +235,7 @@ export class TemplatePage extends React.Component {
             justifyContent: "space-between",
           }}>
             <Typography variant="headline">
-              Available annotations:
+              Available relations:
             </Typography>
             {this.state.showHelp? "" : (
             <Button onClick={this.showHelp}>

@@ -306,7 +306,7 @@ export class TemplateView extends React.Component {
             <Typography 
               className={classes.innerFilterElement}
               style={{textAlign:'right', marginTop: '21px'}}>
-              that contains annotations in 
+              that contains relations in 
             </Typography>
             &nbsp;
             <TextField

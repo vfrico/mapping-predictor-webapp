@@ -62,10 +62,10 @@ class VoteAnnotation extends React.Component {
     return (
       <Grid container>
         <Grid item xs={6}>
-          Correct: {correct}
+          Consistent: {correct}
         </Grid>
         <Grid item xs={6}>
-          Wrong: {wrong}
+          Inconsistent: {wrong}
         </Grid>
       </Grid>
     );

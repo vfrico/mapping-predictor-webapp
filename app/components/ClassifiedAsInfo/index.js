@@ -15,12 +15,12 @@ class ClassifiedAsInfo extends React.Component {
     console.log(votesMap)
     if (votesMap.WRONG_MAPPING > 0.5) {
       return {
-        result: "Wrong mapping",
+        result: "Inconsitent relation",
         value: votesMap.WRONG_MAPPING,
       }
     } else {
       return {
-        result: "Correct mapping",
+        result: "Consistent relation",
         value: votesMap.CORRECT_MAPPING,
       }
     }

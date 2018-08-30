@@ -302,12 +302,12 @@ export class AnnotationItem extends React.Component {
             <Button variant="contained"
                     className={classes.correct}
                     onClick={this.sendVoteValid}>
-              Correct mapping
+              Consistent relation
             </Button>
             <Button variant="contained" 
                     className={classes.error}
                     onClick={this.sendVoteIncorrect}>
-              Wrong mapping
+              Inconsistent relation
             </Button>
             <Button onClick={this.getHelpers}>
               help
