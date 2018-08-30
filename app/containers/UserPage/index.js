@@ -155,12 +155,13 @@ export class UserPage extends React.Component {
 
     // Error for admin
     var errorAdminElement = undefined;
+    var isInformative = false;
     if (this.props.userpage.response != undefined) {
       var ok = this.props.userpage.response.code >= 200 && 
-               this.props.userpage.response < 300;
+               this.props.userpage.response.code < 300;
       errorAdminElement = (
         <span className={ok? "": classes.error}>
-          Error is: {this.props.userpage.response.msg}
+          {ok? "" : "Error is: "}{this.props.userpage.response.msg}
         </span>
       )
     }

@@ -77,6 +77,7 @@ function* apiSendFileCSV(action) {
 function* apiSendClassifyByLang(action) {
   console.log("APi classify lang")
   var api = new ApiCalls(API_ROUTE());
+  yield put(submitTriplesResponse({msg:"This action may take some time to fulfil. Please, wait until a new message is shown.", code:200}));
   try {
     const response = yield call(api.postClassifyAnnotations, action.langA, action.langB);
     if (response.status === 201) {
@@ -101,7 +102,13 @@ function* delayErrorDeletion(action) {
 }
 
 function* delayAdminErrorDeletion(action) {
-  yield delay(10 * 1000);
+  var time = 10 * 1000;
+  try {
+    if (action.payload.code < 300) {
+      time = 20 * 1000;
+    }
+  } catch (e) {}
+  yield delay(time);
   yield put(deleteAdminError());
 }
 
