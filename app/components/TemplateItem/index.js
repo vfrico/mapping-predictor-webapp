@@ -65,7 +65,7 @@ class TemplateItem extends React.Component {
         <Paper className={classes.root}
               elevation={2}>
           <Grid container>
-            <Grid item className={classes.leftItem} xs={8}>
+            <Grid item className={classes.leftItem} xs={6}>
               <Typography className={classes.text}>{this.props.template.template}</Typography>
             </Grid>
             <Grid item className={classes.centerItem} xs={1}>
@@ -79,6 +79,12 @@ class TemplateItem extends React.Component {
             </Grid>
             <Grid item className={classes.centerItem} xs={1}>
               <Typography className={classes.text}>{this.props.template.wrongAnnotations}</Typography>
+            </Grid>
+            <Grid item className={classes.centerItem} xs={1}>
+              <Typography className={classes.text}>{this.props.template.relativeWrong}%</Typography>
+            </Grid>
+            <Grid item className={classes.centerItem} xs={1}>
+              <Typography className={classes.text}>{this.props.template.templateUsages}</Typography>
             </Grid>
           </Grid>
         </Paper>

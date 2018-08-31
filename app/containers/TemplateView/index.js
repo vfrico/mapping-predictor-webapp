@@ -221,6 +221,14 @@ export class TemplateView extends React.Component {
     var templatesItems = undefined;
     if (this.props.templateview.templates != undefined) {
       var templatesList = this.props.templateview.templates;
+      templatesList = templatesList.map(template => {
+        var floatValue = template.wrongAnnotations / template.allAnnotations * 100;
+        floatValue = floatValue.toFixed(0);
+        return {
+          ... template,
+          relativeWrong: parseInt(floatValue),
+        }
+      })
 
       // sort list
       templatesList = templatesList.sort(this.state.sortFunction)
@@ -341,7 +349,7 @@ export class TemplateView extends React.Component {
         <div>
           <div className={classes.root}>
           <Grid container>
-            <Grid item className={classes.leftItem} xs={8}>
+            <Grid item className={classes.leftItem} xs={6}>
               <Typography className={classes.text}><b>Template name</b></Typography>
             </Grid>
             <Grid item className={classes.centerItem} xs={1}>
@@ -357,17 +365,31 @@ export class TemplateView extends React.Component {
             <Grid item className={classes.centerItem} xs={1}>
               <Typography className={classes.text}
                           onClick={() => this.changeToNumericSort('correctAnnotations')}>
-                <b>Correct</b>
+                <b>Consistent</b>
                 {this.getSortingCaret('correctAnnotations')}
               </Typography>
             </Grid>
             <Grid item className={classes.centerItem} xs={1}>
               <Typography className={classes.text}
                           onClick={() => this.changeToNumericSort('wrongAnnotations')}>
-                <b>Wrong</b>
+                <b>Inconsistent</b>
                 {this.getSortingCaret('wrongAnnotations')}
               </Typography>
             </Grid>
+            <Grid item className={classes.centerItem} xs={1}>
+              <Typography className={classes.text}
+                          onClick={() => this.changeToNumericSort('relativeWrong')}>
+                <b>Relative</b>
+                {this.getSortingCaret('relativeWrong')}
+              </Typography>
+            </Grid>
+            <Grid item className={classes.centerItem} xs={1}>
+              <Typography className={classes.text}
+                          onClick={() => this.changeToNumericSort('templateUsages')}>
+                <b>Instances</b>
+                {this.getSortingCaret('templateUsages')}
+              </Typography>
+            </Grid>    
           </Grid>
           </div>
           {templatesItems != undefined && templatesItems.length > 0 ?
