@@ -20,7 +20,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { VOTE_CORRECT, VOTE_WRONG } from '../../api/defaults';
-import { Grid } from '@material-ui/core';
+import { Grid, Popper, Button, Fade, Paper, Typography, ListItem, List } from '@material-ui/core';
+
 // import styled from 'styled-components';
 
 /* eslint-disable react/prefer-stateless-function */
@@ -30,6 +31,8 @@ class VoteAnnotation extends React.Component {
     super(props);
     this.state = {
       votes: props.votes,
+      anchorEl: null,
+      open: false,
     }
   }
 
@@ -41,11 +44,20 @@ class VoteAnnotation extends React.Component {
     })
   }
 
+  handleClick = event => {
+    const { currentTarget } = event;
+    this.setState(state => ({
+      anchorEl: currentTarget,
+      open: !state.open,
+    }));
+  };
+
   render() {
 
     const votes = this.state.votes;
 
     var correct = 0, wrong = 0;
+    var usernames = [];
 
     votes.forEach(vote => {
       if (vote.vote != undefined) {
@@ -55,17 +67,37 @@ class VoteAnnotation extends React.Component {
         else if (vote.vote == VOTE_WRONG) {
           wrong += 1;
         }
+        usernames.push(vote.user.username);
       } 
       
     });
-
+    const { anchorEl, open } = this.state;
+    const id = open ? 'simple-popper' : null;
     return (
       <Grid container>
-        <Grid item xs={6}>
+        <Grid item xs={4}>
           Consistent: {correct}
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={4}>
           Inconsistent: {wrong}
+        </Grid>
+        <Grid item xs={4}>
+          <Button variant="contained" onClick={this.handleClick}>
+            See voters
+          </Button>
+          <Popper id={id} open={open} anchorEl={anchorEl} transition>
+          {({ TransitionProps }) => (
+            <Fade {...TransitionProps} timeout={350}>
+              <Paper>
+                <List subheader={<li />}>
+                  {usernames.map(username => (
+                    <ListItem>{username}</ListItem>
+                  ))}
+                </List>
+              </Paper>
+            </Fade>
+          )}
+          </Popper>
         </Grid>
       </Grid>
     );
