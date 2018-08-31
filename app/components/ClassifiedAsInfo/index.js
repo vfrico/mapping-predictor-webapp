@@ -27,11 +27,12 @@ class ClassifiedAsInfo extends React.Component {
 
   render() {
 
-    var { result, value } = this.getHighestPair(this.props.classificationResult.votesMap);
+    //var { result, value } = this.getHighestPair(this.props.classificationResult.votesMap);
+    var value = this.props.classificationResult.votesMap.CORRECT_MAPPING;
     value = value * 100;
     return (
       <div>
-        <span>{result}</span> with probabaility: <span>{value}%</span>
+        <span>Consistent</span> with probabaility: <span>{value}%</span>
       </div>
     );
   }
