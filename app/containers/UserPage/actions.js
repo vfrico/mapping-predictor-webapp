@@ -4,7 +4,10 @@
  *
  */
 
-import { DEFAULT_ACTION, LOGOUT_ACTION, LOGOUT_SUCCESS, LOGOUT_ERROR, LOGOUT_ERROR_DELETE, SEND_CSV_LANGPAIR, CSV_UPLOAD_SUCCESS, SEND_CLASSIFY_BY_LANG, DELETE_ADMIN_ERROR } from './constants';
+import { DEFAULT_ACTION, LOGOUT_ACTION, LOGOUT_SUCCESS, LOGOUT_ERROR,
+   LOGOUT_ERROR_DELETE, SEND_CSV_LANGPAIR, CSV_UPLOAD_SUCCESS, 
+   SEND_CLASSIFY_BY_LANG, DELETE_ADMIN_ERROR,
+   START_INDETERMINATE_PROGRESS, END_INDETERMINATE_PROGRESS } from './constants';
 
 export function defaultAction() {
   return {
@@ -67,5 +70,17 @@ export function sendClassifyByLang(langA, langB) {
 export function deleteAdminError() {
   return {
     type: DELETE_ADMIN_ERROR,
+  }
+}
+
+export function startIndeterminateProgress() {
+  return {
+    type: START_INDETERMINATE_PROGRESS,
+  }
+}
+
+export function endIndeterminateProgress() {
+  return {
+    type: END_INDETERMINATE_PROGRESS,
   }
 }

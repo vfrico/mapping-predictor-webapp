@@ -5,7 +5,7 @@
  */
 
 import { fromJS } from 'immutable';
-import { DEFAULT_ACTION, LOGOUT_ACTION, LOGOUT_SUCCESS, SEND_CSV_LANGPAIR, CSV_UPLOAD_SUCCESS, SEND_CLASSIFY_BY_LANG, DELETE_ADMIN_ERROR } from './constants';
+import { DEFAULT_ACTION, LOGOUT_ACTION, LOGOUT_SUCCESS, SEND_CSV_LANGPAIR, CSV_UPLOAD_SUCCESS, SEND_CLASSIFY_BY_LANG, DELETE_ADMIN_ERROR, START_INDETERMINATE_PROGRESS, END_INDETERMINATE_PROGRESS } from './constants';
 
 export const initialState = fromJS({});
 
@@ -32,6 +32,15 @@ function userPageReducer(state = initialState, action) {
     case LOGOUT_SUCCESS:
       var newState = state.remove('user');
       return newState;
+
+    case START_INDETERMINATE_PROGRESS:
+      var newState = state.set('indeterminate_progress', true);
+      return newState;
+
+    case END_INDETERMINATE_PROGRESS:
+      var newState = state.remove('indeterminate_progress');
+      return newState;
+      
     default:
       return state;
   }

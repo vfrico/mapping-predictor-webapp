@@ -32,7 +32,7 @@ import makeSelectUserPage, { makeSelectUserInformation } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 import messages from './messages';
-import { Button, withStyles, Typography, TextField } from '@material-ui/core';
+import { Button, withStyles, Typography, TextField, CircularProgress } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import { logoutAction, sumbitTriplesCSV, sendClassifyByLang } from './actions';
@@ -74,6 +74,10 @@ const styles = theme => ({
   },
   hide: {
     visibility: 'collapse',
+  },
+  progress: {
+    margin: theme.spacing.unit,
+    marginLeft: theme.spacing.unit * 2,
   },
 });
 
@@ -173,6 +177,12 @@ export class UserPage extends React.Component {
       userRole = "NO_ROLE";
     }
     
+    var progressItem = undefined;
+    if (this.props.userpage.indeterminate_progress != undefined &&
+        this.props.userpage.indeterminate_progress) {
+      progressItem = <CircularProgress size={25} className={classes.progress} />
+    }
+
     return (
       <div className={classes.root}>
       <Grid container spacing={16} className={classes.centerContainer}>
@@ -288,6 +298,7 @@ export class UserPage extends React.Component {
                 <Button variant="contained" onClick={this.classifyLangs}>
                   Classify
                 </Button>
+                {progressItem}
             </div>
           </div>
           {errorAdminElement}

@@ -2,7 +2,7 @@ import { delay } from 'redux-saga'
 import { call, put, takeEvery, takeLatest, all } from 'redux-saga/effects'
 // import { take, call, put, select } from 'redux-saga/effects';
 import { DEFAULT_ACTION, LOAD_TEMPLATES, LOGOUT_ACTION, LOGOUT_ERROR, SEND_CSV_LANGPAIR, SEND_CLASSIFY_BY_LANG, CSV_UPLOAD_SUCCESS } from './constants';
-import { loadedTemplates, logoutAction, logoutSuccess, logoutError, deleteErrorUserPage, submitTriplesResponse, deleteAdminError } from './actions';
+import { loadedTemplates, logoutAction, logoutSuccess, logoutError, deleteErrorUserPage, submitTriplesResponse, deleteAdminError, startIndeterminateProgress, endIndeterminateProgress } from './actions';
 import BrowserStorage from '../../api/browserStorage';
 import ApiCalls from '../../api/api';
 import { API_ROUTE } from '../../api/defaults';
@@ -77,18 +77,22 @@ function* apiSendFileCSV(action) {
 function* apiSendClassifyByLang(action) {
   console.log("APi classify lang")
   var api = new ApiCalls(API_ROUTE());
+  yield put(startIndeterminateProgress());
   yield put(submitTriplesResponse({msg:"This action may take some time to fulfil. Please, wait until a new message is shown.", code:200}));
   try {
     const response = yield call(api.postClassifyAnnotations, action.langA, action.langB);
     if (response.status === 201) {
+      yield put(endIndeterminateProgress());
       const message = yield call([response, response.json]);
       yield put(submitTriplesResponse(message));
     } else {
+      yield put(endIndeterminateProgress());
       const err = yield call([response, response.json])
       console.error("The error is: "+JSON.stringify(err));
       yield put(submitTriplesResponse(err))
     }
   } catch (e) {
+    yield put(endIndeterminateProgress());
     var errorString = e.message;
     console.error("ErrorString: "+errorString)
     yield put(submitTriplesResponse({msg: errorString}));
