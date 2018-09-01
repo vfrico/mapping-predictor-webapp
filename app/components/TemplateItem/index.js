@@ -24,7 +24,7 @@ import { Paper, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import StyledLink from '../StyledLink';
-
+import LockIcon from '@material-ui/icons/Lock';
 // import styled from 'styled-components';
 
 const styles = theme => ({
@@ -44,6 +44,9 @@ const styles = theme => ({
   centerItem: {
     textAlign: 'center',
   },  
+  icon: {
+    marginLeft: theme.spacing.unit,
+  },
 });
 
 /* eslint-disable react/prefer-stateless-function */
@@ -60,13 +63,23 @@ class TemplateItem extends React.Component {
 
     var linkRoute = "/template/"+this.props.template.lang+"/"+this.props.template.template;
 
+    var isLocked = this.props.template.locked;
+
     return (
       <StyledLink to={linkRoute}>
         <Paper className={classes.root}
               elevation={2}>
           <Grid container>
             <Grid item className={classes.leftItem} xs={6}>
-              <Typography className={classes.text}>{this.props.template.template}</Typography>
+              <Typography className={classes.text}>              
+                {this.props.template.template}
+                {isLocked? 
+                  <LockIcon className={classes.icon}/>
+                :
+                  ""
+                }
+              </Typography>
+
             </Grid>
             <Grid item className={classes.centerItem} xs={1}>
               <Typography className={classes.text}>{this.props.template.lang}</Typography>
