@@ -28,7 +28,10 @@ class AnnotationHelper extends React.Component {
     super(props);
 
     this.state = {
-      relatedTriples: this.getRelatedTriples(),
+      relatedTriplesA: this.getRelatedTriples("A"),
+      relatedTriplesB: this.getRelatedTriples("B"),
+      langA: this.props.helpers.langA,
+      langB: this.props.helpers.langB,
       lastShuffle: this.props.shuffle,
     }
   }
@@ -50,12 +53,20 @@ class AnnotationHelper extends React.Component {
   shuffle = () => {
     console.log("SHUFFLE")
     this.setState({
-      relatedTriples: this.getRelatedTriples(),
+      relatedTriplesA: this.getRelatedTriples("A"),
+      relatedTriplesB: this.getRelatedTriples("B"),
     })
   }
 
-  getRelatedTriples = () => {  
-    var list = new Array(... new Set(this.props.helpers.relatedTriples));
+  getRelatedTriples = (lang) => {
+    var list = [];
+    if (lang === "A") {
+      list = new Array(... new Set(this.props.helpers.relatedTriplesA));
+    } else if (lang === "B") {
+      list = new Array(... new Set(this.props.helpers.relatedTriplesB));
+    } else {
+      list = new Array(... new Set(this.props.helpers.relatedTriples));
+    }
     var chosenRelatedTriples = [];
     for (var i = 0; i < 3; i++) {
       var { item, list } = this.getRandom(list);
@@ -89,13 +100,12 @@ class AnnotationHelper extends React.Component {
   urlShortener = (url) => {
     var newUrl = url.replace("http://dbpedia.org/resource/", "dbr:");
     newUrl = newUrl.replace("http://dbpedia.org/ontology/", "dbo:");
+    newUrl = newUrl.replace("http://es.dbpedia.org/resource/", "dbr_es:");
     return newUrl;
   }
 
-  render() {
-
+  genLinkItems = (objectsToUse) => {
     var linkItems = undefined;
-    const objectsToUse = this.state.relatedTriples;
     if (objectsToUse != undefined && objectsToUse.length > 0) {
       linkItems = (
         objectsToUse.map(element => {          
@@ -114,13 +124,21 @@ class AnnotationHelper extends React.Component {
         })
       );
     }
+    return linkItems;
+  }
+
+  render() {
+
+    var linkItemsA = this.genLinkItems(this.state.relatedTriplesA);
+    var linkItemsB = this.genLinkItems(this.state.relatedTriplesB);
 
     return (
       <div>
         <Typography>
           Entities related: 
         </Typography>
-        {linkItems}
+        <Typography><b>{this.state.langA}: </b></Typography>{linkItemsA}
+        <Typography><b>{this.state.langB}: </b></Typography>{linkItemsB}
         {/*JSON.stringify(this.getRelevantObjects())*/}
         {/*JSON.stringify(this.props.helpers)*/}
       </div>
