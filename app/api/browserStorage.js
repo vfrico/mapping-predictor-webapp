@@ -13,8 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
 */
-
-export const _API_ROUTE = 'http://localhost:8080/predictor/webapi';
+export const _API_ROUTE = 'http://35.233.30.21:8080/predictor/webapi';
+//export const _API_ROUTE = 'http://localhost:8080/predictor/webapi';
 
 class BrowserStorage {
     constructor() {

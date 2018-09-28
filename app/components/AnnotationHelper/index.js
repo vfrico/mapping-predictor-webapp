@@ -28,8 +28,8 @@ class AnnotationHelper extends React.Component {
     super(props);
 
     this.state = {
-      relatedTriplesA: this.getRelatedTriples("A"),
-      relatedTriplesB: this.getRelatedTriples("B"),
+      relatedTriplesA: this.getRelatedTriples("A", 1),
+      relatedTriplesB: this.getRelatedTriples("B", 1),
       langA: this.props.helpers.langA,
       langB: this.props.helpers.langB,
       lastShuffle: this.props.shuffle,
@@ -53,12 +53,12 @@ class AnnotationHelper extends React.Component {
   shuffle = () => {
     console.log("SHUFFLE")
     this.setState({
-      relatedTriplesA: this.getRelatedTriples("A"),
-      relatedTriplesB: this.getRelatedTriples("B"),
+      relatedTriplesA: this.getRelatedTriples("A", 1),
+      relatedTriplesB: this.getRelatedTriples("B", 1),
     })
   }
 
-  getRelatedTriples = (lang) => {
+  getRelatedTriples = (lang, maxItems) => {
     var list = [];
     if (lang === "A") {
       list = new Array(... new Set(this.props.helpers.relatedTriplesA));
@@ -68,7 +68,7 @@ class AnnotationHelper extends React.Component {
       list = new Array(... new Set(this.props.helpers.relatedTriples));
     }
     var chosenRelatedTriples = [];
-    for (var i = 0; i < 3; i++) {
+    for (var i = 0; i < maxItems; i++) {
       var { item, list } = this.getRandom(list);
       chosenRelatedTriples.push(item);
     }
